@@ -1,3 +1,4 @@
+# Use this file for PHP 7.0.x - 7.1.x
 FROM php:7.1
 
 ############################################################################
@@ -41,7 +42,7 @@ RUN apt-get install -y default-mysql-client
 #       docker-compose.yml to match your xdebug version.  See the README.md
 #       file for details.
 ############################################################################
-RUN pecl install xdebug-3.1.5 \
+RUN pecl install xdebug-2.6.1 \
     && docker-php-ext-enable xdebug
 
 ############################################################################
@@ -63,6 +64,21 @@ WORKDIR /app
 ENV PATH /app/bin:$PATH
 CMD ["/bin/bash"]
 
+############################################################################
+# Create aliases and set prompt
+############################################################################
+RUN echo "alias mysql='mysql --user=root'\n" >> /home/user/.bashrc \
+    && echo "alias debug='export XDEBUG_CONFIG=remote_enable=on'" >> /home/user/.bashrc \
+    && echo "alias debug_off='export XDEBUG_CONFIG=remote_enable=off'" >> /home/user/.bashrc \
+    && echo "export PS1=\"\u@\h (PHP \$(php -v | head -n 1 | cut -d ' ' -f 2) XDebug: \\\$XDEBUG_CONFIG)) \w\$ \"" >> /home/user/.bashrc
+
+############################################################################
+# Setup Default XDebug settings
+############################################################################
+# This is for PHP 5.x and <7.1.
+COPY ./.docker/php.development.dockerfiles/configs/conf.d/xdebug_2.x.x.ini /usr/local/etc/php/conf.d/xdebug.ini
+# If you don't turn this off here it will try and debug during the composer install.
+ENV XDEBUG_CONFIG "remote_enable=off"
 
 ############################################################################
 # Install PHP Composer https://getcomposer.org/download/
@@ -72,7 +88,7 @@ RUN cd ~ \
     && mkdir bin \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer.phar \
     && chmod u+x ~/bin/composer.phar \
-    && echo "#!/usr/bin/env bash\n\nXDEBUG_MODE=off ~/bin/composer.phar \$@" > ~/bin/composer \
+    && echo "#!/usr/bin/env bash\n\nXDEBUG_CONFIG=remote_enable=off ~/bin/composer.phar \$@" > ~/bin/composer \
     && chmod u+x ~/bin/composer
 
 
@@ -82,6 +98,6 @@ ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH
 ############################################################################
 # Install Codeception native
 ############################################################################
-RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
-    && chmod u+x ~/bin/codecept \
-    && echo "alias codecept='XDEBUG_MODE=off ~/bin/codecept'" >> /home/user/.bashrc
+#RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
+#    && chmod u+x ~/bin/codecept \
+#    && echo "alias codecept='XDEBUG_CONFIG=remote_enable=off ~/bin/codecept'" >> /home/user/.bashrc

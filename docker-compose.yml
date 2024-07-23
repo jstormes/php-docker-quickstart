@@ -23,7 +23,7 @@ services:
   ##########################################################################
   # This section defines the PHP development server.
   ##########################################################################
-  php8-dev:
+  php-dev:
     # Name the container for easy access now you can access the container
     # by name `docker exec -it dev-server bash`.  You may need to change this
     # name if you have a conflict in container names on you system.
@@ -39,27 +39,9 @@ services:
     environment:
       - TZ=America/Chicago # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
-      # Database connection information.
-      - MYSQL_PWD=password
-      - MYSQL_HOST=mariadb   # this is the "hostname" of the database server, see the mariadb section below.
-      - MYSQL_USER=root
-      - MYSQL_DATABASE=app
-      - MYSQL_PORT=3306
-
-      # XDebug mode, this will override the xdebug.ini settings for the container.
-      # off - Nothing is enabled. XDebug does no work besides checking whether functionality is enabled. Use this setting if you want close to 0 overhead.
-      # develop - Enables Development Aids including the overloaded var_dump().
-      # coverage - Enables Code Coverage Analysis to generate code coverage reports, mainly in combination with PhpUnit.
-      # debug - Enables Step Debugging. This can be used to step through your code while it is running, and analyze values of variables.
-      # gcstats - Enables Garbage Collection Statistics to collect statistics about PHP's Garbage Collection Mechanism.
-      # profile - Enables Profiling, with which you can analyze performance bottlenecks with tools like KCacheGrind.
-      # trace - Enables the Function Trace feature, which allows you to record every function call, including arguments, variable assignment, and return value that is made during a request to a file.
-      - XDEBUG_MODE=debug,develop,gcstats,profile,trace
-      - PHP_IDE_CONFIG=serverName=PHPSTORM # This is the server name for the IDE.  This is the default for PHPStorm.
-      # - XDEBUG_CONFIG="remote_enable=on" # This is for PHP 5.x and <7.1.  XDEBUG_MODE is for PHP >7.1 and 8.x.
-      - XDEBUG_START_UPON_ERROR=1 # This will start XDebug if there is an error.
-      - XDEBUG_CLIENT_HOST=host.docker.internal # This is the hostname of the host system.  This is used for XDebug to find the IDE.
-
+      # Database connection string for the application.
+      # See the mariadb: section below for the database setup.
+      - MYSQL_DSN=mysql:host=mariadb;dbname=app;port=3306;charset=utf8mb4;collation=utf8mb4_unicode_ci;user=root;password=password
 
     # The `ports` tells Docker to map port 80 from inside the container to
     # port 8088 outside the container aka port 8088 on the host, aka your laptop.
@@ -77,9 +59,7 @@ services:
       - ./app:/app
       - ./:/project
       - ./.docker/php.configs/php.development.ini:/usr/local/etc/php/php.ini
-      - ./.docker/php.configs/conf.d/xdebug_3.x.x.ini:/usr/local/etc/php/conf.d/xdebug.ini
-      #- ./.docker/php/conf.d/xdebug_2.x.x.ini:/usr/local/etc/php/conf.d/xdebug.ini
-      - ./.docker/xdebug.info:/xdebug.info
+      - ./.docker/php.profiler:/xdebug.info  # see https://xdebug.org/docs/profiler
 
     # This section `command` overrides the default command from the docker image.
     # We are using this to force Docker to start our own command when the container
@@ -90,6 +70,14 @@ services:
     # command: bash -c 'php -S 0.0.0.0:80 -t /app/html'
     #
     # The export in the next line overrides the environment variables and xdebug.ini.
+    # XDebug mode, this will override the XDebug settings for the container.
+    # off - Nothing is enabled. XDebug does no work besides checking whether functionality is enabled. Use this setting if you want close to 0 overhead.
+    # develop - Enables Development Aids including the overloaded var_dump().
+    # coverage - Enables Code Coverage Analysis to generate code coverage reports, mainly in combination with PhpUnit.
+    # debug - Enables Step Debugging. This can be used to step through your code while it is running, and analyze values of variables.
+    # gcstats - Enables Garbage Collection Statistics to collect statistics about PHP's Garbage Collection Mechanism.
+    # profile - Enables Profiling, with which you can analyze performance bottlenecks with tools like KCacheGrind.
+    # trace - Enables the Function Trace feature, which allows you to record every function call, including arguments, variable assignment, and return value that is made during a request to a file.
     # XDEBUG_CONFIG="remote_enable=on" is for PHP 5.x and <7.1.  XDEBUG_MODE is for PHP >7.1 and 8.x.
     command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace XDEBUG_CONFIG="remote_enable=on" XDEBUG_SESSION=PHPSTORM; php -S 0.0.0.0:80 -t /app/html'
 
@@ -124,14 +112,16 @@ services:
   # This server can be used to test the production server setup before
   # deploying to production.
   ##########################################################################
-  php8-prod:
+  php-prod:
     build:
       context: .
       dockerfile: .docker/php.production.dockerfiles/php8.prod.dockerfile
+      # `docker compose push php8-prod` will push the image to the repository.
 #      image: localhost:5000/yourimage  ## goes to local registry
 #      image: your-dockerid/yourimage  ## goes to your repository on Docker Hub
     environment:
       - TZ=America/Chicago
+      - MYSQL_DSN=mysql:host=mariadb;dbname=app;port=3306;charset=utf8mb4;collation=utf8mb4_unicode_ci;user=root;password=password
     ports:
       - "9088:80"
 

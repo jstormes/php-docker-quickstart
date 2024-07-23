@@ -23,7 +23,7 @@ Then open your browser to [http://localhost:8088](http://localhost:8088/).
 To remove the Docker containers, from the Docker CLI windows press 
 [Control]-C and then run `docker compose down`.
 
-## To access the Database
+## To access the development Database
 
 If you have not done so already, start the Docker containers by running
 `docker compose up`.
@@ -41,12 +41,34 @@ Use the following connection information:
 - Password: `password`
 - Database: `app`
 
-## To build a production image
+## To (re)build a production image
 
 To build a production image, run 
-`docker compose docker-compose.yml -f docker-compose.prod.yml up --build`.
+`docker compose build php-prod`.
+
+## To access the production image locally
+
+To open a browser to the production image, run
+`docker compose up php-prod`.
+
+Then open your browser to [http://localhost:9088](http://localhost:9088/).
+
+To stop and remove the production image, press [Control]-C and then run
+`docker compose down`.
 
 ## To publish the production image
 
 To publish the production image to Docker Hub, run 
-`docker compose -f docker-compose.yml -f docker-compose.prod.yml push`.
+`docker compose push php-prod`.
+
+## Production hosting
+
+https://www.hostingadvice.com/how-to/best-docker-container-hosting/
+
+
+
+
+
+
+
+

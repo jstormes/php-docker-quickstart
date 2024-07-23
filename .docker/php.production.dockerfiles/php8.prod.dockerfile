@@ -1,4 +1,4 @@
-FROM php:8 as build
+FROM php:8 AS build
 
 ############################################################################
 # Install system commands and libraries
@@ -62,6 +62,12 @@ RUN rm -rf /var/www/vendor/composer \
 
 
 FROM php:8-apache AS production
+
+
+############################################################################
+# Copy production ini file
+############################################################################
+COPY ./.docker/php.configs/php.production.ini /usr/local/etc/php/php.ini
 
 ############################################################################
 # Install Internationalization

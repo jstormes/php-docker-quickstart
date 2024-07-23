@@ -3,21 +3,23 @@ FROM php:5
 ############################################################################
 # Install system commands and libraries
 ############################################################################
-RUN apt-get -y update \
-    && apt-get install -y \
-       curl \
-       wget \
-       git \
-       zip \
-       unzip
+#RUN sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
+#RUN apt-get -y update
+#RUN apt-get -y upgrade
+#RUN apt-get install -y curl
+#RUN apt-get install -y wget
+#RUN apt-get install -y git
+#RUN apt-get isntall -y zip
+#RUN apt-get install -y unzip
+
 
 ############################################################################
 # Install Internationalization
 ############################################################################
-RUN apt-get -y update \
-&& apt-get install -y libicu-dev \
-&& docker-php-ext-configure intl \
-&& docker-php-ext-install intl
+#RUN apt-get -y update \
+#&& apt-get install -y libicu-dev \
+#&& docker-php-ext-configure intl \
+#&& docker-php-ext-install intl
 
 ############################################################################
 # Setup XDebug https://xdebug.org/download/historical
@@ -38,9 +40,29 @@ RUN useradd -m user \
 #    && echo "Host *\n\tStrictHostKeyChecking no\n" >> /home/user/.ssh/config \
     && chown -R user:user /home/user/.ssh \
     && echo "naked\nnaked" | passwd root
+
+
 USER user
 WORKDIR /app
+# Add our script files to the path so they can be found
+ENV PATH /app/bin:$PATH
 CMD ["/bin/bash"]
+
+############################################################################
+# Create aliases and set prompt
+############################################################################
+RUN echo "alias mysql='mysql --user=root'\n" >> /home/user/.bashrc \
+    && echo "alias debug='export XDEBUG_CONFIG=remote_enable=on'" >> /home/user/.bashrc \
+    && echo "alias debug_off='export XDEBUG_CONFIG=remote_enable=off'" >> /home/user/.bashrc \
+    && echo "export PS1=\"\u@\h (PHP \$(php -v | head -n 1 | cut -d ' ' -f 2) XDebug: \\\$XDEBUG_CONFIG)) \w\$ \"" >> /home/user/.bashrc
+
+############################################################################
+# Setup Default XDebug settings
+############################################################################
+# This is for PHP 5.x and <7.1.
+COPY ./.docker/php.development.dockerfiles/configs/conf.d/xdebug_2.x.x.ini /usr/local/etc/php/conf.d/xdebug.ini
+# If you don't turn this off here it will try and debug during the composer install.
+ENV XDEBUG_CONFIG "remote_enable=off"
 
 ############################################################################
 # Install PHP Composer https://getcomposer.org/download/
@@ -53,8 +75,3 @@ RUN cd ~ \
 # Add our script files to the path so they can be found
 ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH:
 
-############################################################################
-# Install Codeception native
-############################################################################
-#RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
-#    && chmod u+x ~/bin/codecept

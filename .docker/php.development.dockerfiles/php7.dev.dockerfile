@@ -1,4 +1,5 @@
-FROM php:7.2
+# For PHP 7.2-7.4 use this file
+FROM php:7
 
 ############################################################################
 # Install system commands and libraries
@@ -59,9 +60,45 @@ RUN useradd -m user \
 
 USER user
 WORKDIR /app
+CMD ["/bin/bash"]
 # Add our script files to the path so they can be found
 ENV PATH /app/bin:$PATH
-CMD ["/bin/bash"]
+
+
+############################################################################
+# Create aliases and set prompt
+############################################################################
+RUN echo "alias mysql='mysql --user=root'\n" >> /home/user/.bashrc \
+    && echo "alias debug='export XDEBUG_MODE=debug,develop'" >> /home/user/.bashrc \
+    && echo "alias coverage='export XDEBUG_MODE=coverage'" >> /home/user/.bashrc \
+    && echo "alias debug_off='export XDEBUG_MODE=off'" >> /home/user/.bashrc \
+    && echo "export PS1=\"\u@\h (PHP \$(php -v | head -n 1 | cut -d ' ' -f 2) XDebug: \\\$XDEBUG_MODE)) \w\$ \"" >> /home/user/.bashrc
+
+
+###########################################################################
+# Setup Default XDebug settings
+############################################################################
+# Copy the xdebug.ini file to the container.
+COPY ./.docker/php.development.dockerfiles/configs/conf.d/xdebug_3.x.x.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+# XDebug mode, this will override the xdebug.ini settings for the container.
+# off - Nothing is enabled. XDebug does no work besides checking whether functionality is enabled. Use this setting if you want close to 0 overhead.
+# develop - Enables Development Aids including the overloaded var_dump().
+# coverage - Enables Code Coverage Analysis to generate code coverage reports, mainly in combination with PhpUnit.  Will slow down execution conciderably.
+# debug - Enables Step Debugging. This can be used to step through your code while it is running, and analyze values of variables.
+# gcstats - Enables Garbage Collection Statistics to collect statistics about PHP's Garbage Collection Mechanism.
+# profile - Enables Profiling, with which you can analyze performance bottlenecks with tools like KCacheGrind.
+# trace - Enables the Function Trace feature, which allows you to record every function call, including arguments, variable assignment, and return value that is made during a request to a file.
+ENV XDEBUG_MODE debug,develop
+
+# This is the server name for the IDE.  This is the default for PHPStorm.
+ENV PHP_IDE_CONFIG serverName=PHPSTORM
+
+# This will start XDebug if there is an error.
+ENV XDEBUG_START_UPON_ERROR 1
+
+# This is the hostname of the host system.  This is used for XDebug to find the IDE.
+ENV XDEBUG_CLIENT_HOST host.docker.internal
 
 
 ############################################################################
@@ -69,6 +106,7 @@ CMD ["/bin/bash"]
 # Add "--version=1.10.22" after "php --" to get a specific version.
 ############################################################################
 RUN cd ~ \
+    && XDEBUG_MODE=off \
     && mkdir bin \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer.phar \
     && chmod u+x ~/bin/composer.phar \
@@ -82,6 +120,7 @@ ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH
 ############################################################################
 # Install Codeception native
 ############################################################################
-RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
-    && chmod u+x ~/bin/codecept \
-    && echo "alias codecept='XDEBUG_MODE=off ~/bin/codecept'" >> /home/user/.bashrc
+#RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
+#    && XDEBUG_MODE=off \
+#    && chmod u+x ~/bin/codecept \
+#    && echo "alias codecept='XDEBUG_MODE=off ~/bin/codecept'" >> /home/user/.bashrc
