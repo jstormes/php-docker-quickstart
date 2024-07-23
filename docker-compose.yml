@@ -40,7 +40,7 @@ services:
       - TZ=America/Chicago # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
       # Database connection string for the application.
-      # See the mariadb: section below for the database setup.
+      # See the "mariadb:" section below for the database setup.
       - MYSQL_DSN=mysql:host=mariadb;dbname=app;port=3306;charset=utf8mb4;collation=utf8mb4_unicode_ci;user=root;password=password
 
     # The `ports` tells Docker to map port 80 from inside the container to
@@ -91,7 +91,8 @@ services:
       - "host.docker.internal:host-gateway"
 
     # `secrets` allows folders and files specified in the `secrets` at the top of this
-    # file to be mapped inside the container.
+    # file to be mapped inside the container.  To use git and composer in the container,
+    # you will need to map your ssh key.
 #    secrets:
 #      - source: ssh_key
 #        target: /home/user/.ssh/id_ed25519
