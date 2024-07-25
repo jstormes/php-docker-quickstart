@@ -14,21 +14,56 @@ RUN apt-get -y update \
 ############################################################################
 # Install Internationalization
 ############################################################################
-RUN apt-get -y update \
-&& apt-get install -y libicu-dev \
-&& docker-php-ext-configure intl \
-&& docker-php-ext-install intl
+RUN apt-get -y update && apt-get install -y libicu-dev
+RUN docker-php-ext-install intl && docker-php-ext-configure intl
+
+############################################################################
+# Install SOAP
+############################################################################
+#RUN apt-get -y update && apt-get install -y libxml2-dev
+#RUN docker-php-ext-install soap && docker-php-ext-configure soap
+
+############################################################################
+# Install GD
+############################################################################
+#RUN apt-get update -y && apt-get install -y libwebp-dev libjpeg62-turbo-dev \
+#    libpng-dev libxpm-dev libfreetype6-dev
+#RUN docker-php-ext-install gd && docker-php-ext-configure gd
+
+############################################################################
+# Install ZIP
+############################################################################
+#RUN apt-get update -y && apt-get install -y libzip-dev zip
+#RUN docker-php-ext-install zip && docker-php-ext-configure zip
 
 ############################################################################
 # Install MySQL PDO
-#########################################################################
-RUN docker-php-ext-install pdo pdo_mysql \
-&& docker-php-ext-configure pdo_mysql
+############################################################################
+RUN docker-php-ext-install pdo pdo_mysql && docker-php-ext-configure pdo_mysql
 
 ############################################################################
-# Install MySQL client
+# Install MySQLi
 ############################################################################
-RUN apt-get install -y default-mysql-client
+#RUN docker-php-ext-install mysqli && docker-php-ext-configure mysqli
+
+############################################################################
+# Install Session
+############################################################################
+#RUN docker-php-ext-install session && docker-php-ext-configure session
+
+############################################################################
+# Install Redis
+############################################################################
+#RUN pecl install redis && docker-php-ext-enable redis
+
+############################################################################
+# Install LDAP
+############################################################################
+#RUN apt-get -y update && apt-get install libldap2-dev -y \
+#    && apt-get install -y libldap-common \
+#    && apt-get install -y ldap-utils
+#RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && docker-php-ext-install ldap
+
 
 ############################################################################
 # Setup XDebug https://xdebug.org/download/historical
@@ -36,6 +71,9 @@ RUN apt-get install -y default-mysql-client
 ############################################################################
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
+
+# Copy the xdebug.ini file to the container.
+COPY ./.docker/php.development.dockerfiles/configs/conf.d/xdebug_3.x.x.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 ############################################################################
 # Create proper security higene for enviornemnt.
@@ -49,6 +87,11 @@ RUN useradd -m user \
     && chown -R user:user /home/user/.ssh \
     && echo "password\npassword" | passwd root
 
+############################################################################
+# Install MySQL client
+############################################################################
+RUN apt-get install -y default-mysql-client
+RUN echo "alias mysql='mysql --user=root'\n" >> /home/user/.bashrc
 
 USER user
 WORKDIR /app
@@ -57,20 +100,8 @@ CMD ["/bin/bash"]
 ENV PATH /app/bin:$PATH
 
 ############################################################################
-# Create aliases and set prompt
-############################################################################
-RUN echo "alias mysql='mysql --user=root'\n" >> /home/user/.bashrc \
-    && echo "alias debug='export XDEBUG_MODE=debug,develop'" >> /home/user/.bashrc \
-    && echo "alias coverage='export XDEBUG_MODE=coverage'" >> /home/user/.bashrc \
-    && echo "alias debug_off='export XDEBUG_MODE=off'" >> /home/user/.bashrc \
-    && echo "export PS1=\"\u@\h (PHP \$(php -v | head -n 1 | cut -d ' ' -f 2) XDebug: \\\$XDEBUG_MODE)) \w\$ \"" >> /home/user/.bashrc
-
-############################################################################
 # Setup Default XDebug settings
 ############################################################################
-# Copy the xdebug.ini file to the container.
-COPY ./.docker/php.development.dockerfiles/configs/conf.d/xdebug_3.x.x.ini /usr/local/etc/php/conf.d/xdebug.ini
-
 # XDebug mode, this will override the xdebug.ini settings for the container.
 # off - Nothing is enabled. XDebug does no work besides checking whether functionality is enabled. Use this setting if you want close to 0 overhead.
 # develop - Enables Development Aids including the overloaded var_dump().
@@ -89,6 +120,14 @@ ENV XDEBUG_START_UPON_ERROR 1
 
 # This is the hostname of the host system.  This is used for XDebug to find the IDE.
 ENV XDEBUG_CLIENT_HOST host.docker.internal
+
+############################################################################
+# Create aliases and set prompt
+############################################################################
+RUN echo "alias debug='export XDEBUG_MODE=debug,develop'" >> /home/user/.bashrc \
+    && echo "alias coverage='export XDEBUG_MODE=coverage'" >> /home/user/.bashrc \
+    && echo "alias debug_off='export XDEBUG_MODE=off'" >> /home/user/.bashrc \
+    && echo "export PS1=\"\u@\h (PHP \$(php -v | head -n 1 | cut -d ' ' -f 2) XDebug: \\\$XDEBUG_MODE)) \w\$ \"" >> /home/user/.bashrc
 
 
 ############################################################################
