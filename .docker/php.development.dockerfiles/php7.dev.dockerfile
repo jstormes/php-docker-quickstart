@@ -124,7 +124,7 @@ ENV XDEBUG_MODE debug,develop
 ENV PHP_IDE_CONFIG serverName=PHPSTORM
 
 # This will start XDebug if there is an error.
-ENV XDEBUG_START_UPON_ERROR 1
+ENV XDEBUG_START_UPON_ERROR yes
 
 # This is the hostname of the host system.  This is used for XDebug to find the IDE.
 ENV XDEBUG_CLIENT_HOST host.docker.internal
