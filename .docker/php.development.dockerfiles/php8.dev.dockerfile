@@ -127,6 +127,7 @@ ENV XDEBUG_CLIENT_HOST host.docker.internal
 RUN echo "alias debug='export XDEBUG_MODE=debug,develop'" >> /home/user/.bashrc \
     && echo "alias coverage='export XDEBUG_MODE=coverage'" >> /home/user/.bashrc \
     && echo "alias debug_off='export XDEBUG_MODE=off'" >> /home/user/.bashrc \
+    && echo "alias phpunit='XDEBUG_MODE=debug,develop,coverage; phpunit'" >> /home/user/.bashrc \
     && echo "export PS1=\"\u@\h (PHP \$(php -v | head -n 1 | cut -d ' ' -f 2) XDebug: \\\$XDEBUG_MODE)) \w\$ \"" >> /home/user/.bashrc
 
 
