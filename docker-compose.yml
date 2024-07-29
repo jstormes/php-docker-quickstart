@@ -59,7 +59,7 @@ services:
       - ./app:/app
       - ./:/project
       - ./.docker/php.configs/php.development.ini:/usr/local/etc/php/php.ini
-      - ./.docker/php.profiler:/xdebug.info  # see https://xdebug.org/docs/profiler
+      - ./.docker/xdebug.info:/xdebug.info  # see https://xdebug.org/docs/profiler
 
     # This section `command` overrides the default command from the docker image.
     # We are using this to force Docker to start our own command when the container
@@ -67,10 +67,10 @@ services:
     #
     # This command starts a PHP server on port 80 using our mapped folder `/app/html`.
     #
-    # command: bash -c 'php -S 0.0.0.0:80 -t /app/html'
+#    command: bash -c 'php -S 0.0.0.0:80 -t /app/html'
     #
-    # The export in the next line overrides the environment variables and xdebug.ini.
-    # XDebug mode, this will override the XDebug settings for the container.
+    # The export in the command: line overrides the xdebug.ini and any environment variables previously set.
+    # XDEBUG_MODE, this will override the XDebug settings for the container.
     # off - Nothing is enabled. XDebug does no work besides checking whether functionality is enabled. Use this setting if you want close to 0 overhead.
     # develop - Enables Development Aids including the overloaded var_dump().
     # coverage - Enables Code Coverage Analysis to generate code coverage reports, mainly in combination with PhpUnit.
@@ -79,7 +79,8 @@ services:
     # profile - Enables Profiling, with which you can analyze performance bottlenecks with tools like KCacheGrind.
     # trace - Enables the Function Trace feature, which allows you to record every function call, including arguments, variable assignment, and return value that is made during a request to a file.
     # XDEBUG_CONFIG="remote_enable=on" is for PHP 5.x and <7.1.  XDEBUG_MODE is for PHP >7.1 and 8.x.
-    command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace XDEBUG_CONFIG="remote_enable=on" XDEBUG_SESSION=PHPSTORM; php -S 0.0.0.0:80 -t /app/html'
+#    command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace XDEBUG_CONFIG="remote_enable=on" XDEBUG_SESSION=PHPSTORM; php -S 0.0.0.0:80 -t /app/html'
+    command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace; php -S 0.0.0.0:80 -t /app/html'
 
     # `extra_hosts` lets us create DNS hostnames inside our container.
     # internal:host-gateway will map back to the host system.  This is used

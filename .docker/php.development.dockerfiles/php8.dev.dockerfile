@@ -100,7 +100,7 @@ CMD ["/bin/bash"]
 ENV PATH /app/bin:$PATH
 
 ############################################################################
-# Setup Default XDebug settings
+# Setup Default XDebug CLI settings
 ############################################################################
 # XDebug mode, this will override the xdebug.ini settings for the container.
 # off - Nothing is enabled. XDebug does no work besides checking whether functionality is enabled. Use this setting if you want close to 0 overhead.
@@ -110,23 +110,18 @@ ENV PATH /app/bin:$PATH
 # gcstats - Enables Garbage Collection Statistics to collect statistics about PHP's Garbage Collection Mechanism.
 # profile - Enables Profiling, with which you can analyze performance bottlenecks with tools like KCacheGrind.
 # trace - Enables the Function Trace feature, which allows you to record every function call, including arguments, variable assignment, and return value that is made during a request to a file.
-ENV XDEBUG_MODE debug,develop
+#ENV XDEBUG_MODE debug,develop,coverage
+ENV PHP_IDE_CONFIG="serverName=PHPSTORM"
 
-# This is the server name for the IDE.  This is the default for PHPStorm.
-#ENV PHP_IDE_CONFIG serverName=PHPSTORM
-
-# This will start XDebug if there is an error.
-#ENV XDEBUG_START_UPON_ERROR yes
-
-# This is the hostname of the host system.  This is used for XDebug to find the IDE.
-#ENV XDEBUG_CLIENT_HOST host.docker.internal
 
 ############################################################################
-# Create aliases and set prompt
+# Create aliases and set prompt for CLI
 ############################################################################
-RUN echo "alias debug='export XDEBUG_MODE=debug,develop'" >> /home/user/.bashrc \
+RUN echo "alias debug='export XDEBUG_MODE=debug,develop,coverage'" >> /home/user/.bashrc \
     && echo "alias coverage='export XDEBUG_MODE=coverage'" >> /home/user/.bashrc \
     && echo "alias debug_off='export XDEBUG_MODE=off'" >> /home/user/.bashrc \
+    && echo "alias profile='export XDEBUG_MODE=profile'" >> /home/user/.bashrc \
+    && echo "alias debug_all='export XDEBUG_MODE=debug,develop,gcstats,profile,trace'" >> /home/user/.bashrc \
     && echo "alias phpunit='XDEBUG_MODE=debug,develop,coverage; phpunit'" >> /home/user/.bashrc \
     && echo "export PS1=\"\u@\h (PHP \$(php -v | head -n 1 | cut -d ' ' -f 2) XDebug: \\\$XDEBUG_MODE)) \w\$ \"" >> /home/user/.bashrc
 
@@ -137,8 +132,9 @@ RUN echo "alias debug='export XDEBUG_MODE=debug,develop'" >> /home/user/.bashrc 
 # Creates a shell wrapper for composer to run without XDebug.
 # This is needed for PhpStorm to run Composer directly.
 ############################################################################
+# Turn xDebug off so we dont "debug" during docker build.
 RUN cd ~ \
-    && XDEBUG_MODE=off \
+    && export XDEBUG_MODE=off \
     && mkdir ~/bin \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=$HOME/bin --filename=composer.phar \
     && chmod u+x ~/bin/composer.phar \
@@ -152,7 +148,7 @@ ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH
 # Install Codeception native
 ############################################################################
 #RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
-#    && XDEBUG_MODE=off \
+#    && export XDEBUG_MODE=off \
 #    && chmod u+x ~/bin/codecept \
 #    && echo "alias codecept='XDEBUG_MODE=off ~/bin/codecept'" >> /home/user/.bashrc
 

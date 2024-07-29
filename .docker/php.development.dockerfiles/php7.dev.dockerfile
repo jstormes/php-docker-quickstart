@@ -108,7 +108,7 @@ CMD ["/bin/bash"]
 ENV PATH /app/bin:$PATH
 
 ############################################################################
-# Setup Default XDebug settings
+# Setup Default XDebug CLI settings
 ############################################################################
 # XDebug mode, this will override the xdebug.ini settings for the container.
 # off - Nothing is enabled. XDebug does no work besides checking whether functionality is enabled. Use this setting if you want close to 0 overhead.
@@ -118,19 +118,11 @@ ENV PATH /app/bin:$PATH
 # gcstats - Enables Garbage Collection Statistics to collect statistics about PHP's Garbage Collection Mechanism.
 # profile - Enables Profiling, with which you can analyze performance bottlenecks with tools like KCacheGrind.
 # trace - Enables the Function Trace feature, which allows you to record every function call, including arguments, variable assignment, and return value that is made during a request to a file.
-ENV XDEBUG_MODE debug,develop
+ENV XDEBUG_MODE debug,develop,coverage
 
-# This is the server name for the IDE.  This is the default for PHPStorm.
-ENV PHP_IDE_CONFIG serverName=PHPSTORM
-
-# This will start XDebug if there is an error.
-ENV XDEBUG_START_UPON_ERROR yes
-
-# This is the hostname of the host system.  This is used for XDebug to find the IDE.
-ENV XDEBUG_CLIENT_HOST host.docker.internal
 
 ############################################################################
-# Create aliases and set prompt
+# Create aliases and set prompt for CLI
 ############################################################################
 RUN echo "alias debug='export XDEBUG_MODE=debug,develop'" >> /home/user/.bashrc \
     && echo "alias coverage='export XDEBUG_MODE=coverage'" >> /home/user/.bashrc \
