@@ -39,6 +39,8 @@ Then set up the helper to use the IDE key `PHPSTORM`.
 
 ![image](doc/xDebug_Helper.png)
 
+Use [ctrl][shift][x] to trigger debugging.
+
 ## To access the development Database
 
 If you have not done so already, start the Docker containers by running
@@ -74,7 +76,10 @@ To stop and remove the production image, press [Control]-C and then run
 
 ## To publish the production image
 
-To publish the production image to Docker Hub, run 
+Edit the lines in `docker-compose.yml` that specify the `image:` name to
+match your Docker Hub account and repository.
+
+To push the production image to Docker Hub, run 
 `docker compose push php-prod`.
 
 ## Production hosting
