@@ -26,6 +26,19 @@ reflected in the browser.
 To remove the Docker containers, from the Docker CLI windows press 
 [Control]-C and then run `docker compose down`.
 
+### Debugging with PhpStorm and xDebug Helper Chrome Extension
+
+To debug PHP code with PhpStorm, you need to install the xDebug Helper
+Extension.
+
+[https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en]
+
+[https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen?hl=en-US]
+
+Then set up the helper to use the IDE key `PHPSTORM`.
+
+![image](doc/xDebug_Helper.png)
+
 ## To access the development Database
 
 If you have not done so already, start the Docker containers by running

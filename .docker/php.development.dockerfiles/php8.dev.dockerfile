@@ -112,6 +112,8 @@ ENV PATH /app/bin:$PATH
 # trace - Enables the Function Trace feature, which allows you to record every function call, including arguments, variable assignment, and return value that is made during a request to a file.
 #ENV XDEBUG_MODE debug,develop,coverage
 ENV PHP_IDE_CONFIG="serverName=PHPSTORM"
+# Uncomment the line below to start XDebug on every request.
+#ENV XDEBUG_TRIGGER="PHPSTORM"
 
 
 ############################################################################
