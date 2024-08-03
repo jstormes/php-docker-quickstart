@@ -104,7 +104,7 @@ services:
   # This server lets us test without XDebug, and with a dockerfile that
   # can be setup just like the production server.  This lets us check that
   # the dockerfile for production includes all the dependencies that are
-  # needed.
+  # necessary.
   #
   # This server also lets us test server performance without the overhead
   # of the development environment.  The typical use case enables caching,
