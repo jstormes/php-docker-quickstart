@@ -11,7 +11,7 @@ You should fork this project and make it your own.
 
 Make sure you have Docker and Docker Compose installed.
 
-## To start the PHP dev server
+## To start the PHP dev server (CLI)
 
 From the directory root of the project run `docker compose up` to 
 start the PHP server.
@@ -42,6 +42,19 @@ Trace Trigger Value: `XDEBUG_TRACE`
 Profile Trigger Value: `XDEBUG_PROFILE`
 
 Use [ctrl][shift][x] the select `debug` to trigger debugging.
+
+In PhpStorm, set up a new PHP Remote Debug configuration.
+
+- Run->Edit Configurations
+- Click the `+` button and select `PHP Remote Debug`
+- Name: `PHP Remote Debug`
+- Server: `Docker`
+- IDE key: `PHPSTORM`
+- Click `OK`
+
+Open your browser to the page under development, then set a breakpoint in your PHP code and refresh the page.
+
+Or you can use Run->break at first line to start debugging to start on page refresh.
 
 ## To access the development Database
 
