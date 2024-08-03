@@ -9,20 +9,7 @@ It is meant to be a starting point for a PHP project using Docker.
 You should replace this readme and code with your own.
 You should fork or copy from this project and make it your own.
 
-Make sure you have Docker installed and running.
-
-## To start the PHP dev server (CLI)
-
-From the directory root of the project run `docker compose up` to 
-start the PHP server.
-
-Then open your browser to [http://localhost:8088](http://localhost:8088/).
-
-You can change the code in the `app` directory and the changes will be
-reflected in the browser.
-
-To remove the Docker containers, from the Docker CLI windows press 
-[Control]-C and then run `docker compose down`.
+Make sure you have Docker Desktop installed and running.
 
 ### Debugging with PhpStorm and xDebug Helper Chrome Extension
 
@@ -63,12 +50,12 @@ To Debug PHP code:
 - in PhpStorm, set a breakpoint in your PHP code and refresh the page.
 - PhpStorm should stop at the breakpoint.
 - Or you can use Run->break at first line to start debugging on the first line of the code.
+- To Stop debugging, click on the "bug" icon in Chrome and select `Disable`, and/or click the "bug" icon in PhpStorm.
 
 
 ## To access the development Database
 
-If you have not done so already, start the Docker containers by running
-`docker compose up`.
+If you have not done so already, start the Docker containers Run->Run `Build Interactive`.
 
 By default, PhpMyAdmin is available at 
 [http://localhost:7088](http://localhost:7088/).
@@ -85,18 +72,11 @@ Use the following connection information:
 
 ## To (re)build a production image
 
-To build a production image, run 
-`docker compose build php-prod`.
+To build a production image, Run->Run `Build Interactive`.
 
 ## To access the production image locally
 
-To open a browser to the production image, run
-`docker compose up php-prod`.
-
-Then open your browser to [http://localhost:9088](http://localhost:9088/).
-
-To stop and remove the production image, press [Control]-C and then run
-`docker compose down`.
+Open your browser to [http://localhost:9088](http://localhost:9088/).
 
 ## To publish the production image
 
@@ -104,7 +84,7 @@ Edit the lines in `docker-compose.yml` that specify the `image:` name to
 match your Docker Hub account and repository.
 
 To push the production image to Docker Hub, run 
-`docker compose push php-prod`.
+`docker compose push php-prod` from the project root directory.
 
 ## Production hosting
 
