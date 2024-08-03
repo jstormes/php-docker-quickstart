@@ -13,7 +13,7 @@ Make sure you have Docker Desktop installed and running.
 
 ### Debugging with PhpStorm and xDebug Helper browser Extension
 
-To debug PHP code with PhpStorm, you need to install the xDebug Helper
+To debug PHP web code with PhpStorm, you need to install the xDebug Helper
 Extension.
 
 [https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en]
