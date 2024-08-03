@@ -35,11 +35,15 @@ Extension.
 
 [https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen?hl=en-US]
 
-Then set up the helper to use the IDE key `PHPSTORM`.
+Then set up the helper under Extension->Xdebug Helper `details` then `extension options`.
 
-![image](doc/xDebug_Helper.png)
+IDE key: `PHPSTORM`
 
-Use [ctrl][shift][x] to trigger debugging.
+Trace Trigger Value: `XDEBUG_TRACE`
+
+Profile Trigger Value: `XDEBUG_PROFILE`
+
+Use [ctrl][shift][x] the select `debug` to trigger debugging.
 
 ## To access the development Database
 
