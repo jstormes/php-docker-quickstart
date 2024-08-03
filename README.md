@@ -74,7 +74,7 @@ Use the following connection information:
 
 ## To (re)build a production image
 
-To build a production image, Run->Run `Build Interactive`.
+To build a production image, Run->Run `Build Prod`.
 
 ## To access the production image locally
 
