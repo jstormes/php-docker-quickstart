@@ -81,7 +81,7 @@ services:
 #    command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace XDEBUG_CONFIG="remote_enable=on" XDEBUG_SESSION=PHPSTORM; php -S 0.0.0.0:80 -t /app/html'
 #    command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace; php -S 0.0.0.0:80 -t /app/html'
 
-    # `extra_hosts` lets us create DNS hostnames inside our container.
+    # The `extra_hosts` lets us create DNS hostnames inside our container.
     # internal:host-gateway will map back to the host system.  This is used
     # so that XDebug can find the IDE for breakpoints.
     #
@@ -90,7 +90,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-    # `secrets` allows folders and files specified in the `secrets` at the top of this
+    # The `secrets` allows folders and files specified in the `secrets` at the top of this
     # file to be mapped inside the container.  To use git and composer in the container,
     # you will need to map your ssh key.
 #    secrets:
