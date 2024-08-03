@@ -41,7 +41,7 @@ Trace Trigger Value: `XDEBUG_TRACE`
 
 Profile Trigger Value: `XDEBUG_PROFILE`
 
-Use [ctrl][shift][x] the select `debug` to trigger debugging.
+Use `[ctrl][shift][x]` the select `debug` to trigger debugging.
 
 In PhpStorm, set up a new PHP Remote Debug configuration.
 
