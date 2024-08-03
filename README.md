@@ -11,7 +11,7 @@ You should fork or copy from this project and make it your own.
 
 Make sure you have Docker Desktop installed and running.
 
-### Debugging with PhpStorm and xDebug Helper Chrome Extension
+### Debugging with PhpStorm and xDebug Helper browser Extension
 
 To debug PHP code with PhpStorm, you need to install the xDebug Helper
 Extension.
@@ -19,6 +19,8 @@ Extension.
 [https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en]
 
 [https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen?hl=en-US]
+
+[https://addons.mozilla.org/en-US/firefox/addon/xdebug-helper-for-firefox/]
 
 Then set up the helper under Extension->Xdebug Helper `details` then `extension options`.
 
@@ -50,7 +52,7 @@ To Debug PHP code:
 - in PhpStorm, set a breakpoint in your PHP code and refresh the page.
 - PhpStorm should stop at the breakpoint.
 - Or you can use Run->break at first line to start debugging on the first line of the code.
-- To Stop debugging, click on the "bug" icon in Chrome and select `Disable`, and/or click the "bug" icon in PhpStorm.
+- To Stop debugging, click on the "bug" icon in the browser and select `Disable`, and/or click the "bug" icon in PhpStorm.
 
 
 ## To access the development Database
