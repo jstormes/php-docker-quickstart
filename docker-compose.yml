@@ -7,8 +7,8 @@
 # A common development use case is ssh keys for private git repositories.
 ############################################################################
 secrets:
-  ssh_key:
-    file: ~/.ssh/id_ed25519
+#  ssh_key:
+#    file: ~/.ssh/id_ed25519
 
 ############################################################################
 # This section `services` is where the "servers" are.  Each service provides
