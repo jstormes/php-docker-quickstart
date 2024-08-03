@@ -150,7 +150,6 @@ ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH
 # Install Codeception native
 ############################################################################
 #RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
-#    && export XDEBUG_MODE=off \
 #    && chmod u+x ~/bin/codecept \
 #    && echo "alias codecept='XDEBUG_MODE=off ~/bin/codecept'" >> /home/user/.bashrc
 

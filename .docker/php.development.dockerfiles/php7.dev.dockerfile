@@ -138,7 +138,7 @@ RUN echo "alias debug='export XDEBUG_MODE=debug,develop'" >> /home/user/.bashrc 
 # This is needed for PhpStorm to run Composer directly.
 ############################################################################
 RUN cd ~ \
-    && XDEBUG_MODE=off \
+    && export XDEBUG_MODE=off \
     && mkdir ~/bin \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=$HOME/bin --filename=composer.phar \
     && chmod u+x ~/bin/composer.phar \
@@ -152,6 +152,6 @@ ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH
 # Install Codeception native
 ############################################################################
 #RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
-#    && XDEBUG_MODE=off \
+#    && export XDEBUG_MODE=off \
 #    && chmod u+x ~/bin/codecept \
 #    && echo "alias codecept='XDEBUG_MODE=off ~/bin/codecept'" >> /home/user/.bashrc

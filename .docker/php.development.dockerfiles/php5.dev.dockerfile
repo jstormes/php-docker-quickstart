@@ -62,16 +62,20 @@ RUN echo "alias mysql='mysql --user=root'\n" >> /home/user/.bashrc \
 # This is for PHP 5.x and <7.1.
 COPY ./.docker/php.development.dockerfiles/configs/conf.d/xdebug_2.x.x.ini /usr/local/etc/php/conf.d/xdebug.ini
 # If you don't turn this off here it will try and debug during the composer install.
-ENV XDEBUG_CONFIG "remote_enable=off"
+#ENV XDEBUG_CONFIG "remote_enable=off"
 
 ############################################################################
 # Install PHP Composer https://getcomposer.org/download/
 # Add "--version=1.10.22" after "php --" to get a specific version.
 ############################################################################
 RUN cd ~ \
+    && export XDEBUG_CONFIG=remote_enable=off \
     && mkdir bin \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer.phar \
+    && chmod u+x ~/bin/composer.phar \
+    && echo "#!/usr/bin/env bash\n\nXDEBUG_CONFIG=remote_enable=off ~/bin/composer.phar \$@" > ~/bin/composer \
     && chmod u+x ~/bin/composer
+
 # Add our script files to the path so they can be found
 ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH:
 
