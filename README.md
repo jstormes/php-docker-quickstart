@@ -76,6 +76,9 @@ Use the following connection information:
 
 To build a production image, Run->Run `Build Prod`.
 
+Unlike the development image, the production image must be built before changes
+to the code will be reflected in the running container.
+
 ## To access the production image locally
 
 Open your browser to [http://localhost:9088](http://localhost:9088/).
