@@ -7,7 +7,7 @@ development.
 This project is a template for a PHP projects using Docker. 
 It is meant to be a starting point for a PHP project using Docker.
 You should replace this readme and code with your own.
-You should fork this project and make it your own.
+You should fork or copy from this project and make it your own.
 
 Make sure you have Docker and Docker Compose installed.
 
