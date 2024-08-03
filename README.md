@@ -49,6 +49,7 @@ In PhpStorm, set up a new PHP Remote Debug configuration.
 - Click the `+` button and select `PHP Remote Debug`
 - Name: `PHP Remote Debug`
 - Server: `Docker`
+- Compose Files: `./docker-compose.yml;`
 - IDE key: `PHPSTORM`
 - Click `OK`
 
