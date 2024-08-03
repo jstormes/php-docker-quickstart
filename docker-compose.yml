@@ -6,7 +6,7 @@
 #
 # A common development use case is ssh keys for private git repositories.
 ############################################################################
-secrets:
+#secrets:
 #  ssh_key:
 #    file: ~/.ssh/id_ed25519
 

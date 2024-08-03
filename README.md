@@ -43,19 +43,27 @@ Profile Trigger Value: `XDEBUG_PROFILE`
 
 Use `[ctrl][shift][x]` the select `debug` to trigger debugging.
 
-In PhpStorm, set up a new PHP Remote Debug configuration.
+Set up a Docker Server in PhpStorm:
 
-- Run->Edit Configurations
-- Click the `+` button and select `PHP Remote Debug`
-- Name: `PHP Remote Debug`
-- Server: `Docker`
-- Compose Files: `./docker-compose.yml;`
-- IDE key: `PHPSTORM`
-- Click `OK`
+- `[ctrl][alt][s]`
+- Build, Execution, Deployment->Docker
+- Click the `+` button and select `Docker`
+- Name: `Docker`
 
-Open your browser to the page under development, then set a breakpoint in your PHP code and refresh the page.
+Run the Docker server:
 
-Or you can use Run->break at first line to start debugging to start on page refresh.
+- Run->Run `Build Interactive`
+
+Open the web page http://localhost:8088 in your browser.
+
+To Debug PHP code:
+
+- in PhpStorm, click the "bug" icon in the upper right corner of the window to start listening for xDebug connections.
+- in the browser, click the xDebug Helper icon and select `debug` to start debugging.
+- in PhpStorm, set a breakpoint in your PHP code and refresh the page.
+- PhpStorm should stop at the breakpoint.
+- Or you can use Run->break at first line to start debugging on the first line of the code.
+
 
 ## To access the development Database
 
