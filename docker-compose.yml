@@ -58,7 +58,6 @@ services:
     volumes:
       - ./app:/app
       - ./:/project
-      - ./.docker/php.configs/php.development.ini:/usr/local/etc/php/php.ini
       - ./.docker/xdebug.info:/xdebug.info  # see https://xdebug.org/docs/profiler
 
     # This section `command` overrides the default command from the docker image.

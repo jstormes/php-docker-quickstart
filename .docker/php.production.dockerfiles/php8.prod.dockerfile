@@ -26,20 +26,26 @@ RUN docker-php-ext-install pdo pdo_mysql \
 && docker-php-ext-configure pdo_mysql
 
 ############################################################################
+# Copy prodcution ini file
+############################################################################
+COPY ./.docker/php.production.dockerfiles/configs/php.ini /usr/local/etc/php/php.ini
+
+############################################################################
 # Install PHP Composer https://getcomposer.org/download/
 # Add "--version=1.10.22" after "php --" to get a specific version.
 ############################################################################
-RUN cd ~ \
-    && mkdir ~/bin \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=$HOME/bin --filename=composer.phar \
-    && chmod u+x ~/bin/composer.phar \
-    && echo "#!/usr/bin/env bash\n\nXDEBUG_MODE=off ~/bin/composer.phar \$@" > ~/bin/composer \
-    && chmod u+x ~/bin/composer
+#RUN cd ~ \
+#    && mkdir ~/bin \
+#    && curl -sS https://getcomposer.org/installer | php -- --install-dir=$HOME/bin --filename=composer.phar \
+#    && chmod u+x ~/bin/composer.phar \
+#    && echo "#!/usr/bin/env bash\n\nXDEBUG_MODE=off ~/bin/composer.phar \$@" > ~/bin/composer \
+#    && chmod u+x ~/bin/composer
 
 ############################################################################
 # copy the code into the container
 ############################################################################
 COPY ./app /var/www
+
 
 ############################################################################
 # Remove all libraries to force a fresh install
@@ -63,12 +69,6 @@ RUN rm -rf /var/www/vendor/composer \
 
 FROM php:8-apache AS production
 
-
-############################################################################
-# Copy production ini file
-############################################################################
-COPY ./.docker/php.configs/php.production.ini /usr/local/etc/php/php.ini
-
 ############################################################################
 # Install Internationalization
 ############################################################################
@@ -89,6 +89,11 @@ RUN docker-php-ext-install pdo pdo_mysql \
 RUN a2enmod rewrite
 
 ############################################################################
-# copy the code into the container
+# Copy production ini file
+############################################################################
+COPY --from=build /usr/local/etc/php/php.ini /usr/local/etc/php/php.ini
+
+############################################################################
+# copy production code into the container
 ############################################################################
 COPY --from=build /var/www /var/www

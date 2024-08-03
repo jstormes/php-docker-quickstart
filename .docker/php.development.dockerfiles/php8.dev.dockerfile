@@ -66,6 +66,43 @@ RUN docker-php-ext-install pdo pdo_mysql && docker-php-ext-configure pdo_mysql
 
 
 ############################################################################
+# Install XSL
+############################################################################
+#RUN apt-get -y update && apt-get install -y libxslt-dev
+#RUN docker-php-ext-install xsl && docker-php-ext-configure xsl
+
+############################################################################
+# Install XML
+############################################################################
+#RUN apt-get -y update && apt-get install -y libxml2-dev
+#RUN docker-php-ext-install xml && docker-php-ext-configure xml
+
+############################################################################
+# Install XMLRPC
+############################################################################
+#RUN apt-get -y update && apt-get install -y libxmlrpc-epi-dev
+#RUN docker-php-ext-install xmlrpc && docker-php-ext-configure xmlrpc
+
+############################################################################
+# Install XMLWriter
+############################################################################
+#RUN apt-get -y update && apt-get install -y libxmlwriter-dev
+#RUN docker-php-ext-install xmlwriter && docker-php-ext-configure xmlwriter
+
+############################################################################
+# Install XMLReader
+############################################################################
+#RUN apt-get -y update && apt-get install -y libxmlreader-dev
+#RUN docker-php-ext-install xmlreader && docker-php-ext-configure xmlreader
+
+############################################################################
+# Copy the php.ini file to the container.
+############################################################################
+COPY ./.docker/php.development.dockerfiles/configs/php.ini /usr/local/etc/php/php.ini
+
+
+
+############################################################################
 # Setup XDebug https://xdebug.org/download/historical
 # xdebug-x.x.x for specific version
 ############################################################################

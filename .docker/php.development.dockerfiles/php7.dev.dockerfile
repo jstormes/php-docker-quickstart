@@ -130,6 +130,10 @@ RUN echo "alias debug='export XDEBUG_MODE=debug,develop'" >> /home/user/.bashrc 
     && echo "alias phpunit='XDEBUG_MODE=debug,develop,coverage; phpunit'" >> /home/user/.bashrc \
     && echo "export PS1=\"\u@\h (PHP \$(php -v | head -n 1 | cut -d ' ' -f 2) XDebug: \\\$XDEBUG_MODE)) \w\$ \"" >> /home/user/.bashrc
 
+############################################################################
+# Copy the php.ini file to the container.
+############################################################################
+COPY ./.docker/php.development.dockerfiles/configs/php.ini /usr/local/etc/php/php.ini
 
 ############################################################################
 # Install PHP Composer https://getcomposer.org/download/

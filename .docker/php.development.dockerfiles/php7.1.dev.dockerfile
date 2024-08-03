@@ -32,6 +32,11 @@ RUN docker-php-ext-install pdo pdo_mysql \
 RUN apt-get install -y default-mysql-client
 
 ############################################################################
+# Copy the php.ini file to the container.
+############################################################################
+COPY ./.docker/php.development.dockerfiles/configs/php.ini /usr/local/etc/php/php.ini
+
+############################################################################
 # Setup XDebug https://xdebug.org/download/historical
 # xdebug-x.x.x for specific version
 # xdebug for PHP 8.0 and nerwer

@@ -22,6 +22,11 @@ FROM php:5
 #&& docker-php-ext-install intl
 
 ############################################################################
+# Copy the php.ini file to the container.
+############################################################################
+#COPY ./.docker/php.development.dockerfiles/configs/php.ini /usr/local/etc/php/php.ini
+
+############################################################################
 # Setup XDebug https://xdebug.org/download/historical
 # xdebug-x.x.x for specific version
 # Last PHP 5 XDebug version is 2.5.5
