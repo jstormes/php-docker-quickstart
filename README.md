@@ -39,7 +39,7 @@ Set up a Docker Server in PhpStorm:
 - Click the `+` button and select `Docker`
 - Name: `Docker`
 
-Run the Docker server:
+Build and Run the Docker server:
 
 - Run->Run `Build Interactive`
 
@@ -54,23 +54,6 @@ To Debug PHP code:
 - Or you can use Run->break at first line to start debugging on the first line of the code.
 - To Stop debugging, click on the "bug" icon in the browser and select `Disable`, and/or click the "bug" icon in PhpStorm.
 
-
-## To access the development Database
-
-If you have not done so already, start the Docker containers Run->Run `Build Interactive`.
-
-By default, PhpMyAdmin is available at 
-[http://localhost:7088](http://localhost:7088/).
-
-To access the database from outside the Docker container, you can use
-a database client like MySQL Workbench or DBeaver.  
-Use the following connection information:
-
-- Host: `localhost`
-- Port: `5000`
-- Username: `root`
-- Password: `password`
-- Database: `app`
 
 ## To (re)build a production image
 
@@ -96,9 +79,20 @@ To push the production image to Docker Hub, run
 https://www.hostingadvice.com/how-to/best-docker-container-hosting/
 
 
+## To access the development Database
 
+If you have not done so already, start the Docker containers Run->Run `Build Interactive`.
 
+By default, PhpMyAdmin is available at
+[http://localhost:7088](http://localhost:7088/).
 
+To access the database from outside the Docker container, you can use
+a database client like MySQL Workbench or DBeaver.  
+Use the following connection information:
 
-
+- Host: `localhost`
+- Port: `5000`
+- Username: `root`
+- Password: `password`
+- Database: `app`
 
