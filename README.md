@@ -1,6 +1,6 @@
 # php-docker-quickstart
-A starting project works with PhpStorm for using Docker for PHP for 
-development
+A project template that works with PhpStorm and Docker for PHP for 
+development.
 
 ## Quick start
 
