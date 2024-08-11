@@ -91,7 +91,7 @@ RUN a2enmod rewrite
 ############################################################################
 # Copy production ini file
 ############################################################################
-COPY --from=build /usr/local/etc/php/php.ini /usr/local/etc/php/php.ini
+COPY ./.docker/php.production.dockerfiles/configs/php.ini /usr/local/etc/php/php.ini
 
 ############################################################################
 # copy production code into the container

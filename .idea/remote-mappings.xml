@@ -4,6 +4,13 @@
     <list>
       <list>
         <remote-mappings server-id="php@6391bd04-2321-43f3-9ba6-7104cc45ed64" />
+        <remote-mappings server-id="php@f75a593f-c105-4ded-af07-e259bc969145">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/project" />
+            </list>
+          </settings>
+        </remote-mappings>
       </list>
     </list>
   </component>
