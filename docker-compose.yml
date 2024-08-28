@@ -7,8 +7,11 @@
 # A common development use case is ssh keys for private git repositories.
 ############################################################################
 #secrets:
-#  ssh_key:
-#    file: ~/.ssh/id_ed25519
+#  ssh:
+#    file: ~/.ssh
+#  aws:
+#    file: ~/.aws
+
 
 ############################################################################
 # This section `services` is where the "servers" are.  Each service provides
@@ -94,8 +97,17 @@ services:
     # file to be mapped inside the container.  To use git and composer in the container,
     # you will need to map your ssh key.
 #    secrets:
-#      - source: ssh_key
-#        target: /home/user/.ssh/id_ed25519
+#      - source: ssh
+#        target: /home/user/.ssh
+#        uid: "1000"
+#        gid: "1000"
+#        mode: 0700
+#
+#      - source: aws
+#        target: /home/user/.aws
+#        uid: "1000"
+#        gid: "1000"
+#        mode: 0700
 
 
   ##########################################################################
@@ -117,7 +129,7 @@ services:
     build:
       context: .
       dockerfile: .docker/php.production.dockerfiles/php8.prod.dockerfile
-      # `docker compose push php8-prod` will push the image to the repository.
+      # `docker compose push php-prod` will push the image to the repository.
 #      image: localhost:5000/yourimage  ## goes to local registry
 #      image: your-dockerid/yourimage  ## goes to your repository on Docker Hub
     environment:

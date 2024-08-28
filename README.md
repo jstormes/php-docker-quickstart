@@ -96,3 +96,39 @@ Use the following connection information:
 - Password: `password`
 - Database: `app`
 
+# Extended Documentation
+
+## Howto get `ssh` and `git` working inside the container
+
+At the top of the `docker-compose.yml` file you will see `secrets:`.
+This is a list of secrets passed into the container.
+
+The `secrets` are used to create a `~/.ssh` directory inside the container.
+This ssh key is used to connect to the GitHub server to download composer packages
+under development. You will need to uncomment the `secrets` sections in the 
+`docker-compose.yml` file there are two of them.
+
+You need to have your ssh keys in the `~/.ssh` directory on your local machine.
+
+To test that the ssh key is working:
+
+* `docker-compose exec php-dev bash` to get into the container.
+* `ssh git@github.com` to test the connection.
+* You should see something like `Hi jstormes! You've successfully authenticated ...`
+* `exit` to leave the container.
+
+## AWS secrets inside the container
+
+The `secrets` are used to create a `~/.aws` directory inside the container.
+
+You need to have your AWS keys in the `~/.aws` directory on your local machine.
+You will need to uncomment the `secrets` sections in the `docker-compose.yml` file.
+Also uncomment the `Install AWS-CLI` in the `php?.dev.dockerfile` file.
+
+To test that the aws connection is working:
+
+* `docker-compose exec php-dev bash` to get into the container.
+* `aws sts get-caller-identity` to test the connection.
+* You should see something like ` "UserId": "AROAUH3TAFGAASDFIZ675T:..." `
+* `exit` to leave the container.
+
