@@ -30,7 +30,7 @@ Trace Trigger Value: `XDEBUG_TRACE`
 
 Profile Trigger Value: `XDEBUG_PROFILE`
 
-Use `[ctrl][shift][x]` or click the bug icon on the toolbar, the select `debug` to trigger debugging.
+In the browser press `[ctrl][shift][x]` or click the bug icon on the toolbar, the select `debug` to trigger debugging.
 
 Set up a Docker Server in PhpStorm:
 
