@@ -2,6 +2,8 @@
 A project template that works with PhpStorm and Docker for PHP for 
 development.
 
+Video available at [https://youtu.be/hpBOagsSF_E]
+
 ## Quick start
 
 This project is a template for a PHP projects using Docker. 
