@@ -2,7 +2,7 @@
 A project template that works with PhpStorm and Docker for PHP for 
 development.
 
-Video available at [https://youtu.be/hpBOagsSF_E]
+Video available at [https://youtu.be/hpBOagsSF_E](https://youtu.be/hpBOagsSF_E)
 
 ## Quick start
 
@@ -18,11 +18,14 @@ Make sure you have Docker Desktop installed and running.
 To debug PHP web code with PhpStorm, you need to install the xDebug Helper
 Extension.
 
-[https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en]
+Chrome:
+[https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en](https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en)
 
-[https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen?hl=en-US]
+Edge:
+[https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen?hl=en-US](https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen?hl=en-US)
 
-[https://addons.mozilla.org/en-US/firefox/addon/xdebug-helper-for-firefox/]
+Firefox:
+[https://addons.mozilla.org/en-US/firefox/addon/xdebug-helper-for-firefox/](https://addons.mozilla.org/en-US/firefox/addon/xdebug-helper-for-firefox/)
 
 Then set up the helper under Extension->Xdebug Helper `details` then `extension options`.
 
