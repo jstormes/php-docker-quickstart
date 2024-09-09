@@ -1,0 +1,10 @@
+services:
+
+  php-server:
+    image: jstormes/phpdemo1
+
+    environment:
+      - TZ=America/Chicago # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+    ports:
+      - "80:80"
