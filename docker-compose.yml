@@ -131,7 +131,7 @@ services:
 #      ssh:
 #        - default
       dockerfile: .docker/php.production.dockerfiles/php8.prod.dockerfile
-      # `docker compose push php-prod` will push the image to the repository.
+  # `docker compose push php-prod` will push the image to the repository.
 #    image: localhost:5000/yourimage  ## goes to local registry
 #    image: your-dockerid/yourimage  ## goes to your repository on Docker Hub
     environment:
