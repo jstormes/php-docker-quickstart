@@ -128,6 +128,8 @@ services:
   php-prod:
     build:
       context: .
+#      ssh:
+#        - default
       dockerfile: .docker/php.production.dockerfiles/php8.prod.dockerfile
       # `docker compose push php-prod` will push the image to the repository.
 #    image: localhost:5000/yourimage  ## goes to local registry
