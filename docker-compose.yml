@@ -161,7 +161,7 @@ services:
     ports:
       - "5000:3306"
     volumes:
-      - ./.docker/db-startup.development:/docker-entrypoint-initdb.d
+      - ./Startup-Database:/docker-entrypoint-initdb.d
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
