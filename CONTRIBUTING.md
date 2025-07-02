@@ -72,10 +72,23 @@ environment:
 
 ### 3. Database Customization
 
-**Adding Initial Data:**
-Create SQL files in `.docker/db-startup.development/`:
+**Adding Database Schema:**
+Create SQL files in `Startup-Database/`:
 ```sql
--- .docker/db-startup.development/01-initial-data.sql
+-- Startup-Database/2_UsersTable.sql
+CREATE TABLE `users` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `username` varchar(50) NOT NULL,
+    `email` varchar(100) NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+**Adding Initial Data:**
+Create SQL files in `Startup-Database/`:
+```sql
+-- Startup-Database/4_InitialData.sql
 INSERT INTO users (name, email) VALUES ('Admin', 'admin@example.com');
 ```
 
@@ -86,6 +99,11 @@ environment:
   - MYSQL_ROOT_PASSWORD=your_secure_password
   - MYSQL_DATABASE=your_database_name
 ```
+
+**Database Initialization:**
+- Files in `Startup-Database/` are executed in alphabetical order
+- Use numbered prefixes (1_, 2_, etc.) to control execution order
+- See `Startup-Database/0_README.md` for detailed documentation
 
 ### 4. Adding New Services
 

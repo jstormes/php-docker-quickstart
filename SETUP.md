@@ -111,6 +111,8 @@ docker-compose up
    - Port: 5000
    - Username: root
    - Password: password
+3. Database initialization scripts are in `Startup-Database/` directory
+4. See `Startup-Database/0_README.md` for database setup documentation
 
 ### 3. Container Management
 

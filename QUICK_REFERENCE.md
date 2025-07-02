@@ -109,6 +109,7 @@ docker-compose up --build
 php-docker-quickstart/
 ├── app/html/              # Your PHP files here
 ├── .docker/               # Docker configs
+├── Startup-Database/      # Database initialization
 ├── docker-compose.yml     # Main config
 ├── README.md             # Main documentation
 ├── SETUP.md              # Detailed setup
@@ -133,4 +134,5 @@ php-docker-quickstart/
 - **Main Guide**: README.md
 - **Setup Issues**: SETUP.md
 - **Customization**: CONTRIBUTING.md
+- **Database Setup**: Startup-Database/0_README.md
 - **Video Tutorial**: [PHP Docker Quickstart](https://youtu.be/hpBOagsSF_E) 
