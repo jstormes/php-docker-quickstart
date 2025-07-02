@@ -21,11 +21,11 @@ docker-compose exec php-dev bash
 
 ## 🌐 Access URLs
 
-| Service | URL | Description |
-|---------|-----|-------------|
+| Service     | URL                   | Description          |
+|-------------|-----------------------|----------------------|
 | Development | http://localhost:8088 | Your PHP application |
-| Production | http://localhost:9088 | Production build |
-| PhpMyAdmin | http://localhost:7088 | Database management |
+| Production  | http://localhost:9088 | Production build     |
+| PhpMyAdmin  | http://localhost:7088 | Database management  |
 
 ## 🗄️ Database Connection
 
