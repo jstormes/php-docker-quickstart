@@ -1,25 +1,31 @@
 ############################################################################
-# This section `secrets` is for sharing secret files between the host
-# and Docker containers.  Unlike volumes, secrets can be outside the
-# project's directory structure and have special rules to help prevent them
-# from being included in a Docker image.
+# SECRETS CONFIGURATION
+# 
+# This section allows you to securely share files between your host machine
+# and Docker containers. Secrets are useful for:
+# - SSH keys for Git/Composer private repositories
+# - AWS credentials for cloud services
+# - Other sensitive configuration files
 #
-# A common development use case is ssh keys for private git repositories.
+# To enable secrets, uncomment the lines below and ensure the files exist
+# on your host machine.
 ############################################################################
 #secrets:
 #  ssh:
-#    file: ~/.ssh
+#    file: ~/.ssh  # Your SSH keys for Git access
 #  aws:
-#    file: ~/.aws
+#    file: ~/.aws  # Your AWS credentials
 
 
 ############################################################################
-# This section `services` is where the "servers" are.  Each service provides
-# a "server".  Common development use cases are web servers, database
-# servers and testing servers.
+# SERVICES CONFIGURATION
 #
-# The purpose of each service is to define how the service (aka server)
-# interacts with the host.
+# This section defines all the services (containers) that make up your
+# development environment. Each service provides a specific function:
+# - php-dev: Development web server with debugging
+# - php-prod: Production web server for testing
+# - mariadb: Database server
+# - phpmyadmin: Database management interface
 ############################################################################
 services:
 

@@ -1,139 +1,169 @@
-# php-docker-quickstart
-A project template that works with PhpStorm and Docker for PHP for 
-development.
+# PHP Docker Quickstart
 
-Video available at [https://youtu.be/hpBOagsSF_E](https://youtu.be/hpBOagsSF_E)
+A ready-to-use PHP development environment with Docker, featuring PhpStorm integration and xDebug debugging support.
 
-## Quick start
+## 🚀 Quick Start
 
-This project is a template for a PHP projects using Docker. 
-It is meant to be a starting point for a PHP project using Docker.
-You should replace this readme and code with your own.
-You should fork or copy from this project and make it your own.
+### Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
+- [PhpStorm](https://www.jetbrains.com/phpstorm/) (optional, for debugging)
 
-Make sure you have Docker Desktop installed and running.
+### 1. Clone and Start
+```bash
+git clone git@github.com:jstormes/php-docker-quickstart.git
+cd php-docker-quickstart
+docker-compose up -d
+```
 
-### Debugging with PhpStorm and xDebug Helper browser Extension
+### 2. Access Your Application
+- **Development server**: http://localhost:8088
+- **Production server**: http://localhost:9088
+- **PhpMyAdmin**: http://localhost:7088
 
-To debug PHP web code with PhpStorm, you need to install the xDebug Helper
-Extension.
+## 📁 Project Structure
 
-Chrome:
-[https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en](https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en)
+```
+php-docker-quickstart/
+├── app/                    # Your PHP application code
+│   └── html/              # Web root directory
+├── .docker/               # Docker configuration files
+│   ├── php.development.dockerfiles/  # Development Dockerfile
+│   ├── php.production.dockerfiles/   # Production Dockerfile
+│   └── db-startup.development/       # Database initialization
+├── docker-compose.yml     # Main Docker configuration
+└── README.md             # This file
+```
 
-Edge:
-[https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen?hl=en-US](https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen?hl=en-US)
+## 🔧 Development Features
 
-Firefox:
-[https://addons.mozilla.org/en-US/firefox/addon/xdebug-helper-for-firefox/](https://addons.mozilla.org/en-US/firefox/addon/xdebug-helper-for-firefox/)
+### PHP Development Environment
+- **PHP 8.x** with common extensions
+- **MariaDB** database server
+- **PhpMyAdmin** for database management
+- **Hot reload** - code changes reflect immediately
 
-Then set up the helper under Extension->Xdebug Helper `details` then `extension options`.
+### Database Access
+- **Host**: localhost
+- **Port**: 5000
+- **Username**: root
+- **Password**: password
+- **Database**: app
 
-IDE key: `PHPSTORM`
+## 🐛 Debugging with PhpStorm
 
-Trace Trigger Value: `XDEBUG_TRACE`
+### 1. Install xDebug Helper Extension
+- **Chrome**: [xDebug Helper](https://chromewebstore.google.com/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc)
+- **Firefox**: [xDebug Helper](https://addons.mozilla.org/en-US/firefox/addon/xdebug-helper-for-firefox/)
+- **Edge**: [xDebug Helper](https://microsoftedge.microsoft.com/addons/detail/xdebug-helper/ggnngifabofaddiejjeagbaebkejomen)
 
-Profile Trigger Value: `XDEBUG_PROFILE`
+### 2. Configure xDebug Helper
+- Set IDE key to: `PHPSTORM`
+- Set Trace Trigger to: `XDEBUG_TRACE`
+- Set Profile Trigger to: `XDEBUG_PROFILE`
 
-In the browser press `[ctrl][shift][x]` or click the bug icon on the toolbar, the select `debug` to trigger debugging.
+### 3. Setup PhpStorm
+1. Open Settings (`Ctrl+Alt+S`)
+2. Go to Build, Execution, Deployment → Docker
+3. Add Docker server with name: `Docker`
 
-Set up a Docker Server in PhpStorm:
+### 4. Start Debugging
+1. Click the bug icon in PhpStorm to start listening
+2. Press `Ctrl+Shift+X` in browser and select "debug"
+3. Set breakpoints in your PHP code
+4. Refresh the page to trigger debugging
 
-- `[ctrl][alt][s]`
-- Build, Execution, Deployment->Docker
-- Click the `+` button and select `Docker`
-- Name: `Docker`
+## 🚀 Production Deployment
 
-Build and Run the Docker server:
+### Build Production Image
+```bash
+docker-compose -f docker-compose.yml up php-prod --build
+```
 
-- Run->Run `Build Interactive`
+### Publish to Docker Hub
+1. Edit `docker-compose.yml` and update the image name:
+   ```yaml
+   image: your-dockerid/yourimage
+   ```
+2. Push the image:
+   ```bash
+   docker compose push php-prod
+   ```
 
-Open the web page http://localhost:8088 in your browser.
+## 🔐 Advanced Configuration
 
-To Debug PHP code:
+### SSH Keys for Git/Composer
+To use private repositories inside the container:
 
-- in PhpStorm, click the "bug" icon in the upper right corner of the window to start listening for xDebug connections.
-- in the browser, click the xDebug Helper icon and select `debug` to start debugging.
-- in PhpStorm, set a breakpoint in your PHP code and refresh the page.
-- PhpStorm should stop at the breakpoint.
-- Or you can use Run->break at first line to start debugging on the first line of the code.
-- To Stop debugging, click on the "bug" icon in the browser and select `Disable`, and/or click the "bug" icon in PhpStorm.
+1. Uncomment the `secrets` section in `docker-compose.yml`
+2. Ensure your SSH keys are in `~/.ssh/` on your host machine
+3. Test connection:
+   ```bash
+   docker-compose exec php-dev bash
+   ssh git@github.com
+   ```
 
+### AWS CLI Integration
+To use AWS services inside the container:
 
-## To (re)build a production image
+1. Uncomment the AWS secrets in `docker-compose.yml`
+2. Ensure your AWS credentials are in `~/.aws/` on your host machine
+3. Uncomment "Install AWS-CLI" in the Dockerfile
+4. Test connection:
+   ```bash
+   docker-compose exec php-dev bash
+   aws sts get-caller-identity
+   ```
 
-To build a production image, Run->Run `Build Prod`.
+## 🛠️ Common Commands
 
-Unlike the development image, the production image must be built before changes
-to the code will be reflected in the running container.
+```bash
+# Start development environment
+docker-compose up -d
 
-## To access the production image locally
+# Stop all services
+docker-compose down
 
-Open your browser to [http://localhost:9088](http://localhost:9088/).
+# View logs
+docker-compose logs php-dev
 
-## To publish the production image
+# Access container shell
+docker-compose exec php-dev bash
 
-Edit the lines in `docker-compose.yml` that specify the `image:` name to
-match your Docker Hub account and repository.
+# Rebuild containers
+docker-compose up --build
+```
 
-To push the production image to Docker Hub, run 
-`docker compose push php-prod` from the project root directory.
+## 🆘 Troubleshooting
 
-## Production hosting
+### Port Already in Use
+If you get port conflicts, edit the ports in `docker-compose.yml`:
+```yaml
+ports:
+  - "8089:80"  # Change 8088 to another port
+```
 
-https://www.hostingadvice.com/how-to/best-docker-container-hosting/
+### xDebug Not Working
+1. Ensure xDebug Helper extension is installed and configured
+2. Check that PhpStorm is listening for connections
+3. Verify the IDE key matches in both PhpStorm and browser extension
 
+### Database Connection Issues
+1. Ensure MariaDB container is running: `docker-compose ps`
+2. Check database logs: `docker-compose logs mariadb`
+3. Verify connection string in environment variables
 
-## To access the development Database
+## 📚 Additional Resources
 
-If you have not done so already, start the Docker containers Run->Run `Build Interactive`.
+- [Docker Documentation](https://docs.docker.com/)
+- [xDebug Documentation](https://xdebug.org/docs/)
+- [PhpStorm Docker Integration](https://www.jetbrains.com/help/phpstorm/docker.html)
+- [Production Hosting Options](https://www.hostingadvice.com/how-to/best-docker-container-hosting/)
 
-By default, PhpMyAdmin is available at
-[http://localhost:7088](http://localhost:7088/).
+## 📝 License
 
-To access the database from outside the Docker container, you can use
-a database client like MySQL Workbench or DBeaver.  
-Use the following connection information:
+This project is a template. Feel free to fork and customize for your own projects.
 
-- Host: `localhost`
-- Port: `5000`
-- Username: `root`
-- Password: `password`
-- Database: `app`
+---
 
-# Extended Documentation
-
-## Howto get `ssh` and `git` working inside the container
-
-At the top of the `docker-compose.yml` file you will see `secrets:`.
-This is a list of secrets passed into the container.
-
-The `secrets` are used to create a `~/.ssh` directory inside the container.
-This ssh key is used to connect to the GitHub server to download composer packages
-under development. You will need to uncomment the `secrets` sections in the 
-`docker-compose.yml` file there are two of them.
-
-You need to have your ssh keys in the `~/.ssh` directory on your local machine.
-
-To test that the ssh key is working:
-
-* `docker-compose exec php-dev bash` to get into the container.
-* `ssh git@github.com` to test the connection.
-* You should see something like `Hi jstormes! You've successfully authenticated ...`
-* `exit` to leave the container.
-
-## AWS secrets inside the container
-
-The `secrets` are used to create a `~/.aws` directory inside the container.
-
-You need to have your AWS keys in the `~/.aws` directory on your local machine.
-You will need to uncomment the `secrets` sections in the `docker-compose.yml` file.
-Also uncomment the `Install AWS-CLI` in the `php?.dev.dockerfile` file.
-
-To test that the aws connection is working:
-
-* `docker-compose exec php-dev bash` to get into the container.
-* `aws sts get-caller-identity` to test the connection.
-* You should see something like ` "UserId": "AROAUH3TAFGAASDFIZ675T:..." `
-* `exit` to leave the container.
+**Video Tutorial**: [PHP Docker Quickstart Setup](https://youtu.be/hpBOagsSF_E)
 
