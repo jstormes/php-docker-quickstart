@@ -138,8 +138,8 @@ services:
 #        - default
       dockerfile: .docker/php.production.dockerfiles/php8.prod.dockerfile
   # `docker compose push php-prod` will push the image to the repository.
-#    image: localhost:5000/yourimage  ## goes to local registry
-#    image: your-dockerid/yourimage  ## goes to your repository on Docker Hub
+#    image: localhost:5000/your-image  ## goes to local registry
+#    image: your-docker-id/your-image  ## goes to your repository on Docker Hub
     environment:
       - TZ=America/Chicago
       - MYSQL_DSN=mysql:host=mariadb;dbname=app;port=3306;charset=utf8mb4;collation=utf8mb4_unicode_ci;user=root;password=password
