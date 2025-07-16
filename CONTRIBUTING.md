@@ -50,7 +50,7 @@ Thank you for your interest in contributing to this PHP Docker Quickstart projec
 ### 2. Modify Docker Configuration
 
 **Adding PHP Extensions:**
-Edit `.docker/php.development.dockerfiles/php8.dev.dockerfile`:
+Edit the `Dockerfile` and add extensions to the appropriate target:
 ```dockerfile
 # Add your required extensions
 RUN docker-php-ext-install pdo_mysql mysqli
@@ -73,9 +73,9 @@ environment:
 ### 3. Database Customization
 
 **Adding Database Schema:**
-Create SQL files in `Startup-Database/`:
+Create SQL files in `database/`:
 ```sql
--- Startup-Database/2_UsersTable.sql
+-- database/002_UsersTable.sql
 CREATE TABLE `users` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `username` varchar(50) NOT NULL,
@@ -86,9 +86,9 @@ CREATE TABLE `users` (
 ```
 
 **Adding Initial Data:**
-Create SQL files in `Startup-Database/`:
+Create SQL files in `database/`:
 ```sql
--- Startup-Database/4_InitialData.sql
+-- database/004_InitialData.sql
 INSERT INTO users (name, email) VALUES ('Admin', 'admin@example.com');
 ```
 
@@ -101,9 +101,9 @@ environment:
 ```
 
 **Database Initialization:**
-- Files in `Startup-Database/` are executed in alphabetical order
-- Use numbered prefixes (1_, 2_, etc.) to control execution order
-- See `Startup-Database/0_README.md` for detailed documentation
+- Files in `database/` are executed in alphabetical order
+- Use 3-digit numbered prefixes (001_, 002_, etc.) to control execution order
+- See `database/0_README.md` for detailed documentation
 
 ### 4. Adding New Services
 

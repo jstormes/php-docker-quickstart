@@ -65,7 +65,7 @@ services:
       - ./:/project
       - ./config/docker/php.ini-development:/usr/local/etc/php/php.ini
 #      - ./config/docker/php.ini-production:/usr/local/etc/php/php.ini
-      - ./config/xdebug.dev.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./config/docker/xdebug.dev.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./xdebug.info:/xdebug.info  # see https://xdebug.org/docs/profiler
 
     # This section `command` overrides the default command from the docker image.

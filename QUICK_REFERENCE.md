@@ -65,7 +65,7 @@ ports:
 ```
 
 ### Add PHP Extensions
-Edit `.docker/php.development.dockerfiles/php8.dev.dockerfile`:
+Edit the `Dockerfile` and add extensions to the appropriate target:
 ```dockerfile
 RUN docker-php-ext-install pdo_mysql mysqli
 ```
@@ -108,9 +108,12 @@ docker-compose up --build
 ```
 php-docker-quickstart/
 ├── app/html/              # Your PHP files here
-├── .docker/               # Docker configs
-├── Startup-Database/      # Database initialization
+├── config/docker/         # Docker configs
+├── database/              # Database initialization
+├── Startup-Database/      # Legacy database directory
+├── xdebug.info/          # xDebug profiling output
 ├── docker-compose.yml     # Main config
+├── Dockerfile            # Docker image definition
 ├── README.md             # Main documentation
 ├── SETUP.md              # Detailed setup
 ├── CONTRIBUTING.md       # How to contribute
@@ -134,5 +137,5 @@ php-docker-quickstart/
 - **Main Guide**: README.md
 - **Setup Issues**: SETUP.md
 - **Customization**: CONTRIBUTING.md
-- **Database Setup**: Startup-Database/0_README.md
+- **Database Setup**: database/0_README.md
 - **Video Tutorial**: [PHP Docker Quickstart](https://youtu.be/hpBOagsSF_E) 

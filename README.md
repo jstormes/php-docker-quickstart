@@ -24,20 +24,26 @@ docker-compose up -d
 
 ```
 php-docker-quickstart/
-├── app/                    # Your PHP application code
-│   └── html/              # Web root directory
-├── .docker/               # Docker configuration files
-│   ├── php.development.dockerfiles/  # Development Dockerfile
-│   ├── php.production.dockerfiles/   # Production Dockerfile
-│   └── xdebug.info/                  # xDebug configuration
-├── Startup-Database/       # Database initialization scripts
-│   ├── 0_README.md        # Database setup documentation
-│   └── 1_StartupTables.sql # Initial database schema
-├── docker-compose.yml     # Main Docker configuration
-├── README.md             # This file
-├── SETUP.md              # Detailed setup guide
-├── CONTRIBUTING.md       # How to contribute
-└── QUICK_REFERENCE.md    # Quick reference guide
+├── app/                         # Your PHP application code
+│   └── html/                    # Web root directory
+├── config/                      # Configuration files
+│   └── docker/                  # Docker configuration files
+│       ├── php.ini-development  # Development PHP configuration
+│       ├── php.ini-production   # Production PHP configuration
+│       ├── xdebug_3.x.x.ini     # xDebug configuration
+│       └── xdebug.dev.ini/      # xDebug development settings
+├── database/                    # Database initialization scripts
+│   ├── 0_README.md              # Database setup documentation
+│   └── 1_StartupTables.sql      # Initial database schema
+├── Startup-Database/            # Legacy database directory (see database/ above)
+│   └── 0_README.md              # Legacy database documentation
+├── xdebug.info/                 # xDebug profiling output directory
+├── docker-compose.yml           # Main Docker configuration
+├── Dockerfile                   # Docker image definition
+├── README.md                    # This file
+├── SETUP.md                     # Detailed setup guide
+├── CONTRIBUTING.md              # How to contribute
+└── QUICK_REFERENCE.md           # Quick reference guide
 ```
 
 ## 🔧 Development Features
@@ -54,7 +60,7 @@ php-docker-quickstart/
 - **Username**: root
 - **Password**: password
 - **Database**: app
-- **Initialization**: Files in `Startup-Database/` directory
+- **Initialization**: Files in `database/` directory
 
 ## 🐛 Debugging with PhpStorm
 
@@ -165,7 +171,7 @@ ports:
 - [xDebug Documentation](https://xdebug.org/docs/)
 - [PhpStorm Docker Integration](https://www.jetbrains.com/help/phpstorm/docker.html)
 - [Production Hosting Options](https://www.hostingadvice.com/how-to/best-docker-container-hosting/)
-- [Database Setup Guide](Startup-Database/0_README.md)
+- [Database Setup Guide](database/0_README.md)
 
 ## 📝 License
 
