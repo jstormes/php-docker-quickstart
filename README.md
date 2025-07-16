@@ -34,8 +34,6 @@ php-docker-quickstart/
 ├── database/                    # Database initialization scripts
 │   ├── 0_README.md              # Database setup documentation
 │   └── 1_StartupTables.sql      # Initial database schema
-├── Startup-Database/            # Legacy database directory (see database/ above)
-│   └── 0_README.md              # Legacy database documentation
 ├── xdebug.info/                 # xDebug profiling output directory
 ├── docker-compose.yml           # Main Docker configuration
 ├── Dockerfile                   # Docker image definition
