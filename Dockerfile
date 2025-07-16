@@ -1,4 +1,13 @@
-FROM php:8
+FROM php:8-apache AS php8base
+############################################################################
+# This is the base PHP 8 docker image used for both the development and
+# production docker files.  By having this file common we can ensure that
+# any needed extensions are installed the same in both docker enviornments.
+#
+# Only things that are common acorss both the development and prodcution
+# docker files should go in this file.
+############################################################################
+
 
 ############################################################################
 # Install system commands and libraries
@@ -15,36 +24,19 @@ RUN apt-get -y update \
 # Install AWS-CLI
 # https://stackoverflow.com/questions/46038891/how-to-install-awscli-using-pip-in-library-node-docker-image
 ############################################################################
+#RUN apt-get install -y unzip
 #RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
 #        && unzip awscliv2.zip \
 #        && ./aws/install \
 #        && rm awscliv2.zip \
 #        && rm -rf ./aws
+#RUN apt-get remove -y unzip
 
 ############################################################################
 # Install Internationalization
 ############################################################################
-RUN apt-get -y update && apt-get install -y libicu-dev
-RUN docker-php-ext-install intl && docker-php-ext-configure intl
-
-############################################################################
-# Install SOAP
-############################################################################
-#RUN apt-get -y update && apt-get install -y libxml2-dev
-#RUN docker-php-ext-install soap && docker-php-ext-configure soap
-
-############################################################################
-# Install GD
-############################################################################
-#RUN apt-get update -y && apt-get install -y libwebp-dev libjpeg62-turbo-dev \
-#    libpng-dev libxpm-dev libfreetype6-dev
-#RUN docker-php-ext-install gd && docker-php-ext-configure gd
-
-############################################################################
-# Install ZIP
-############################################################################
-#RUN apt-get update -y && apt-get install -y libzip-dev zip
-#RUN docker-php-ext-install zip && docker-php-ext-configure zip
+RUN apt-get -y update && apt-get install -y libicu-dev \
+  && docker-php-ext-install intl && docker-php-ext-configure intl
 
 ############################################################################
 # Install MySQL PDO
@@ -55,6 +47,25 @@ RUN docker-php-ext-install pdo pdo_mysql && docker-php-ext-configure pdo_mysql
 # Install MySQLi
 ############################################################################
 #RUN docker-php-ext-install mysqli && docker-php-ext-configure mysqli
+
+############################################################################
+# Install SOAP
+#############################################################################
+#RUN apt-get -y update && apt-get install -y libxml2-dev \
+#  && docker-php-ext-install soap && docker-php-ext-configure soap
+
+############################################################################
+# Install GD
+############################################################################
+#RUN apt-get update -y && apt-get install -y libwebp-dev libjpeg62-turbo-dev \
+#    libpng-dev libxpm-dev libfreetype6-dev \
+#  && docker-php-ext-install gd && docker-php-ext-configure gd
+
+############################################################################
+# Install ZIP
+############################################################################
+#RUN apt-get update -y && apt-get install -y libzip-dev zip \
+#    && docker-php-ext-install zip && docker-php-ext-configure zip
 
 ############################################################################
 # Install Session
@@ -71,45 +82,67 @@ RUN docker-php-ext-install pdo pdo_mysql && docker-php-ext-configure pdo_mysql
 ############################################################################
 #RUN apt-get -y update && apt-get install libldap2-dev -y \
 #    && apt-get install -y libldap-common \
-#    && apt-get install -y ldap-utils
-#RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && docker-php-ext-install ldap
-
+#    && apt-get install -y ldap-utils \
+#    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && docker-php-ext-install ldap
 
 ############################################################################
 # Install XSL
 ############################################################################
-#RUN apt-get -y update && apt-get install -y libxslt-dev
-#RUN docker-php-ext-install xsl && docker-php-ext-configure xsl
+#RUN apt-get -y update && apt-get install -y libxslt-dev \
+#    && docker-php-ext-install xsl && docker-php-ext-configure xsl
 
 ############################################################################
 # Install XML
 ############################################################################
-#RUN apt-get -y update && apt-get install -y libxml2-dev
-#RUN docker-php-ext-install xml && docker-php-ext-configure xml
+#RUN apt-get -y update && apt-get install -y libxml2-dev \
+#    && docker-php-ext-install xml && docker-php-ext-configure xml
 
 ############################################################################
 # Install XMLRPC
+# TODO: Broken
 ############################################################################
 #RUN apt-get -y update && apt-get install -y libxmlrpc-epi-dev
 #RUN docker-php-ext-install xmlrpc && docker-php-ext-configure xmlrpc
 
 ############################################################################
 # Install XMLWriter
+# TODO: Broken
 ############################################################################
 #RUN apt-get -y update && apt-get install -y libxmlwriter-dev
 #RUN docker-php-ext-install xmlwriter && docker-php-ext-configure xmlwriter
 
 ############################################################################
 # Install XMLReader
+# TODO: Broken
 ############################################################################
 #RUN apt-get -y update && apt-get install -y libxmlreader-dev
 #RUN docker-php-ext-install xmlreader && docker-php-ext-configure xmlreader
 
 ############################################################################
-# Copy the php.ini file to the container.
+# Install PHP Composer https://getcomposer.org/download/
+# Add "--version=1.10.22" after "php --" to get a specific version.
+# Creates a shell wrapper for composer to run without XDebug.
 ############################################################################
-COPY ./.docker/php.development.dockerfiles/configs/php.ini /usr/local/etc/php/php.ini
+# Turn xDebug off so we dont "debug" during docker build.
+RUN export XDEBUG_MODE=off \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar \
+    && chmod a+x /usr/local/bin/composer.phar \
+    && echo "#!/usr/bin/env bash\n\nXDEBUG_MODE=off /usr/local/bin/composer.phar \$@" > /usr/local/bin/composer \
+    && chmod a+x /usr/local/bin/composer
 
+
+
+
+FROM php8base AS php8dev
+############################################################################
+# This is the PHP 8 development docker image.
+# It is based on the php8base image and includes additional
+# development tools and configurations.
+# This image is used for local development and testing.
+# It includes XDebug for debugging and development aids.
+# It is not intended for production use.
+# The php8prodcution image should be used for production.
+################################################################################
 
 
 ############################################################################
@@ -118,9 +151,6 @@ COPY ./.docker/php.development.dockerfiles/configs/php.ini /usr/local/etc/php/ph
 ############################################################################
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
-
-# Copy the xdebug.ini file to the container.
-COPY ./.docker/php.development.dockerfiles/configs/conf.d/xdebug_3.x.x.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 ############################################################################
 # Create proper security higene for enviornemnt.
@@ -145,6 +175,7 @@ WORKDIR /app
 CMD ["/bin/bash"]
 # Add our script files to the path so they can be found
 ENV PATH /app/bin:$PATH
+
 
 ############################################################################
 # Setup Default XDebug CLI settings
@@ -174,22 +205,6 @@ RUN echo "alias debug='export XDEBUG_MODE=debug,develop,coverage'" >> /home/user
     && echo "alias phpunit='XDEBUG_MODE=debug,develop,coverage; phpunit'" >> /home/user/.bashrc \
     && echo "export PS1=\"\u@\h (PHP \$(php -v | head -n 1 | cut -d ' ' -f 2) XDebug: \\\$XDEBUG_MODE)) \w\$ \"" >> /home/user/.bashrc
 
-
-############################################################################
-# Install PHP Composer https://getcomposer.org/download/
-# Add "--version=1.10.22" after "php --" to get a specific version.
-# Creates a shell wrapper for composer to run without XDebug.
-# This is needed for PhpStorm to run Composer directly.
-############################################################################
-# Turn xDebug off so we dont "debug" during docker build.
-RUN cd ~ \
-    && export XDEBUG_MODE=off \
-    && mkdir ~/bin \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=$HOME/bin --filename=composer.phar \
-    && chmod u+x ~/bin/composer.phar \
-    && echo "#!/usr/bin/env bash\n\nXDEBUG_MODE=off ~/bin/composer.phar \$@" > ~/bin/composer \
-    && chmod u+x ~/bin/composer
-
 # Add our script files to the path so they can be found
 ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH
 
@@ -199,4 +214,46 @@ ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH
 #RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
 #    && chmod u+x ~/bin/codecept \
 #    && echo "alias codecept='XDEBUG_MODE=off ~/bin/codecept'" >> /home/user/.bashrc
+
+
+
+FROM php8base AS php8prod
+############################################################################
+# This is the PHP 8 production docker image.
+# It is based on the php8base image and includes additional
+# production tools and configurations.
+# This image is used for production deployments.
+# It does not include XDebug or any development tools.
+# The php8dev image should be used for development.
+############################################################################
+
+############################################################################
+# Copy the source files into the container.
+############################################################################
+COPY ./app /var/www
+
+############################################################################
+# If the composer.json file is present, install the dependencies.
+# This is done in the production image to ensure that the dependencies
+# are installed in the production environment.
+############################################################################
+RUN if [ -f /var/www/composer.json ]; then \
+        echo "Installing composer dependencies..."; \
+        rm -fr /var/www/vendor \
+        cd /var/www \
+        composer install --no-dev --optimize-autoloader \
+    else \
+        echo "No composer.json file found, skipping composer install."; \
+    fi
+
+############################################################################
+# Copy production ini file
+############################################################################
+COPY config/docker/php.ini-production /usr/local/etc/php/php.ini
+
+############################################################################
+# Remove unneeded files
+############################################################################
+RUN rm -rf /var/www/vendor/composer \
+    && rm -rf /var/www/vendor/bin
 

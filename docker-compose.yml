@@ -1,31 +1,25 @@
 ############################################################################
-# SECRETS CONFIGURATION
-# 
-# This section allows you to securely share files between your host machine
-# and Docker containers. Secrets are useful for:
-# - SSH keys for Git/Composer private repositories
-# - AWS credentials for cloud services
-# - Other sensitive configuration files
+# This section `secrets` is for sharing secret files between the host
+# and Docker containers.  Unlike volumes, secrets can be outside the
+# project's directory structure and have special rules to help prevent them
+# from being included in a Docker image.
 #
-# To enable secrets, uncomment the lines below and ensure the files exist
-# on your host machine.
+# A common development use case is ssh keys for private git repositories.
 ############################################################################
 #secrets:
 #  ssh:
-#    file: ~/.ssh  # Your SSH keys for Git access
+#    file: ~/.ssh
 #  aws:
-#    file: ~/.aws  # Your AWS credentials
+#    file: ~/.aws
 
 
 ############################################################################
-# SERVICES CONFIGURATION
+# This section `services` is where the "servers" are.  Each service provides
+# a "server".  Common development use cases are web servers, database
+# servers and testing servers.
 #
-# This section defines all the services (containers) that make up your
-# development environment. Each service provides a specific function:
-# - php-dev: Development web server with debugging
-# - php-prod: Production web server for testing
-# - mariadb: Database server
-# - phpmyadmin: Database management interface
+# The purpose of each service is to define how the service (aka server)
+# interacts with the host.
 ############################################################################
 services:
 
@@ -42,7 +36,9 @@ services:
     # setup specified in the given dockerfile.
     build:
       context: .
-      dockerfile: .docker/php.development.dockerfiles/php8.dev.dockerfile
+      dockerfile: Dockerfile
+      target: php8dev
+#    image: php8dev:latest
 
     # This section sets the environment variables inside the Docker container.
     environment:
@@ -67,7 +63,10 @@ services:
     volumes:
       - ./app:/app
       - ./:/project
-      - ./.docker/xdebug.info:/xdebug.info  # see https://xdebug.org/docs/profiler
+      - ./config/docker/php.ini-development:/usr/local/etc/php/php.ini
+#      - ./config/docker/php.ini-production:/usr/local/etc/php/php.ini
+      - ./config/xdebug.dev.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./xdebug.info:/xdebug.info  # see https://xdebug.org/docs/profiler
 
     # This section `command` overrides the default command from the docker image.
     # We are using this to force Docker to start our own command when the container
@@ -134,12 +133,13 @@ services:
   php-prod:
     build:
       context: .
+      dockerfile: Dockerfile
+      target: php8prod
 #      ssh:
 #        - default
-      dockerfile: .docker/php.production.dockerfiles/php8.prod.dockerfile
   # `docker compose push php-prod` will push the image to the repository.
-#    image: localhost:5000/your-image  ## goes to local registry
-#    image: your-docker-id/your-image  ## goes to your repository on Docker Hub
+#    image: localhost:5000/yourimage  ## goes to local registry
+#    image: your-dockerid/yourimage  ## goes to your repository on Docker Hub
     environment:
       - TZ=America/Chicago
       - MYSQL_DSN=mysql:host=mariadb;dbname=app;port=3306;charset=utf8mb4;collation=utf8mb4_unicode_ci;user=root;password=password
@@ -161,7 +161,7 @@ services:
     ports:
       - "5000:3306"
     volumes:
-      - ./Startup-Database:/docker-entrypoint-initdb.d
+      - ./database:/docker-entrypoint-initdb.d
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
