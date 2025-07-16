@@ -30,8 +30,7 @@ php-docker-quickstart/
 │   └── docker/                  # Docker configuration files
 │       ├── php.ini-development  # Development PHP configuration
 │       ├── php.ini-production   # Production PHP configuration
-│       ├── xdebug_3.x.x.ini     # xDebug configuration
-│       └── xdebug.dev.ini/      # xDebug development settings
+│       └── xdebug_3.x.x.ini     # xDebug development settings
 ├── database/                    # Database initialization scripts
 │   ├── 0_README.md              # Database setup documentation
 │   └── 1_StartupTables.sql      # Initial database schema
