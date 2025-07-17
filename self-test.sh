@@ -26,22 +26,27 @@ rm -rf vendor
 
 # Install dependencies using Composer if composer.json exists
 if [ -f composer.json ]; then
-  echo "\n\nInstalling dependencies using Composer..."
+  echo
+  echo "Installing dependencies using Composer..."
   composer install --no-interaction --optimize-autoloader
 else
-  echo "\n\ncomposer.json not found. Skipping Composer installation."
+  echo "composer.json not found. Skipping Composer installation."
 fi
 
 # Run unit tests if PHPUnit is phpunit.xml exists
 if [ -f phpunit.xml ]; then
-  echo "\n\nRunning PHPUnit tests..."
+  echo
+  echo "Running PHPUnit tests..."
   vendor/bin/phpunit --configuration phpunit.xml
 else
-  echo "\n\nphpunit.xml not found. Skipping PHPUnit tests."
+  echo
+  echo "phpunit.xml not found. Skipping PHPUnit tests."
 fi
 
 # Run static analysis using PHPStan
 #phpstan analyse --configuration phpstan.neon
 
-echo "\n\n!!!!!!!!!!!! Self-test completed successfully !!!!!!!!!!!!\n\n"
+echo
+echo
+echo "!!!!!!!!!!!! Self-test completed successfully !!!!!!!!!!!!"
 exit 0
