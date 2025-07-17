@@ -13,12 +13,12 @@ fi
 
 echo "Running self-test script..."
 
-# Copy application files to the container
+# Copy application files to the container's temporary directory
 rm -rf /tmp/app
 mkdir /tmp/app
 cp -r /app/* /tmp/app/
 
-# Change to the application directory
+# Change to the temporary directory
 cd /tmp/app
 
 # Remove the vendor directory if it exists
@@ -26,22 +26,22 @@ rm -rf vendor
 
 # Install dependencies using Composer if composer.json exists
 if [ -f composer.json ]; then
-  echo "Installing dependencies using Composer..."
+  echo "\n\nInstalling dependencies using Composer..."
   composer install --no-interaction --optimize-autoloader
 else
-  echo "composer.json not found. Skipping Composer installation."
+  echo "\n\ncomposer.json not found. Skipping Composer installation."
 fi
 
 # Run unit tests if PHPUnit is phpunit.xml exists
 if [ -f phpunit.xml ]; then
-  echo "Running PHPUnit tests..."
+  echo "\n\nRunning PHPUnit tests..."
   vendor/bin/phpunit --configuration phpunit.xml
 else
-  echo "phpunit.xml not found. Skipping PHPUnit tests."
+  echo "\n\nphpunit.xml not found. Skipping PHPUnit tests."
 fi
 
 # Run static analysis using PHPStan
 #phpstan analyse --configuration phpstan.neon
 
-echo "Self-test completed successfully."
+echo "\n\n!!!!!!!!!!!! Self-test completed successfully !!!!!!!!!!!!\n\n"
 exit 0
