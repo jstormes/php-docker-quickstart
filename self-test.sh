@@ -43,8 +43,15 @@ else
   echo "phpunit.xml not found. Skipping PHPUnit tests."
 fi
 
-# Run static analysis using PHPStan
-#phpstan analyse --configuration phpstan.neon
+# Run static analysis using PHPStan if phpstan.neon.dist exists
+if [ -f phpstan.neon.dist ]; then
+  echo
+  echo "Running PHPStan static analysis..."
+  vendor/bin/phpstan analyse --configuration phpstan.neon.dist
+else
+  echo
+  echo "phpstan.neon.dist not found. Skipping PHPStan analysis."
+fi
 
 echo
 echo
