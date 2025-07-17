@@ -22,7 +22,7 @@ cp -r /app/* /tmp/app/
 cd /tmp/app
 
 # Remove the vendor directory if it exists
-rm -rf vendor
+#rm -rf vendor
 
 # Install dependencies using Composer if composer.json exists
 if [ -f composer.json ]; then
