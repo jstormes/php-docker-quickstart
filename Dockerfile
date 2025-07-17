@@ -309,7 +309,7 @@ RUN if [ -f /var/www/composer.json ]; then \
         echo "Installing composer dependencies..."; \
         rm -fr /var/www/vendor \
         cd /var/www \
-        composer install --no-dev --optimize-autoloader \
+        composer install --no-interaction --no-dev --optimize-autoloader \
     else \
         echo "No composer.json file found, skipping composer install."; \
     fi

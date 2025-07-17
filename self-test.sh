@@ -24,11 +24,21 @@ cd /tmp/app
 # Remove the vendor directory if it exists
 rm -rf vendor
 
-# Install dependencies using Composer
-#composer install --no-interaction --optimize-autoloader
+# Install dependencies using Composer if composer.json exists
+if [ -f composer.json ]; then
+  echo "Installing dependencies using Composer..."
+  composer install --no-interaction --optimize-autoloader
+else
+  echo "composer.json not found. Skipping Composer installation."
+fi
 
-# Run unit tests
-#phpunit --configuration phpunit.xml
+# Run unit tests if PHPUnit is phpunit.xml exists
+if [ -f phpunit.xml ]; then
+  echo "Running PHPUnit tests..."
+  vendor/bin/phpunit --configuration phpunit.xml
+else
+  echo "phpunit.xml not found. Skipping PHPUnit tests."
+fi
 
 # Run static analysis using PHPStan
 #phpstan analyse --configuration phpstan.neon
