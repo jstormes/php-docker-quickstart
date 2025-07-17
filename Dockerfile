@@ -232,7 +232,10 @@ ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH
 
 FROM php8dev AS test
 
-ENTRYPOINT ["bash", "docker-self-test.sh"]
+RUN mkdir -p /home/user/bin
+COPY ./self-test.sh /home/user/bin/self-test.bash
+
+ENTRYPOINT ["bash","/home/user/bin/self-test.bash"]
 
 ############################################################################
 # Copy development ini file
