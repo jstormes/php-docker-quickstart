@@ -17,7 +17,7 @@ docker-compose up -d
 
 ### 2. Access Your Application
 - **Development server**: http://localhost:8088
-- **Production server**: http://localhost:9088
+- **Production like server**: http://localhost:9088
 - **PhpMyAdmin**: http://localhost:7088
 
 ## 📁 Project Structure
@@ -33,7 +33,7 @@ php-docker-quickstart/
 │       └── xdebug_3.x.x.ini     # xDebug development settings
 ├── database/                    # Database initialization scripts
 │   ├── 0_README.md              # Database setup documentation
-│   └── 1_StartupTables.sql      # Initial database schema
+│   └── 001_StartupTables.sql    # Initial database schema
 ├── xdebug.info/                 # xDebug profiling output directory
 ├── docker-compose.yml           # Main Docker configuration
 ├── Dockerfile                   # Docker image definition

@@ -116,6 +116,26 @@ services:
 
 
   ##########################################################################
+  # This section defines a "CI/CD testing" server.
+  ##########################################################################
+  ci-cd-test:
+    depends_on:
+      - php-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    environment:
+      - TZ=America/Chicago
+    ports:
+      - "5088:80"
+    volumes:
+      - ./app:/app
+      - ./config/docker/php.ini-development:/usr/local/etc/php/php.ini
+      #- ./config/docker/php.ini-production:/usr/local/etc/php/php.ini
+
+
+  ##########################################################################
   # This section defines a "production" server.
   #
   # This server lets us test without XDebug, and with a dockerfile that
@@ -131,6 +151,8 @@ services:
   # deploying to production.
   ##########################################################################
   php-prod:
+#    depends_on:
+#      - ci-cd-test
     build:
       context: .
       dockerfile: Dockerfile

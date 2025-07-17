@@ -170,12 +170,18 @@ RUN useradd -m user \
 RUN apt-get install -y default-mysql-client
 RUN echo "alias mysql='mysql --user=root'\n" >> /home/user/.bashrc
 
+#############################################################################
+# Install Apicize
+#############################################################################
+RUN wget https://github.com/apicize/cli/releases/download/apicize-cli-v0.21.3/Apicize-run_0.21.3_amd64.deb
+RUN apt install ./Apicize-run_0.21.3_amd64.deb
+RUN rm -f Apicize-run_0.21.3_amd64.deb
+
 USER user
 WORKDIR /app
 CMD ["/bin/bash"]
 # Add our script files to the path so they can be found
 ENV PATH /app/bin:$PATH
-
 
 ############################################################################
 # Setup Default XDebug CLI settings
@@ -211,9 +217,61 @@ ENV PATH /app/vendor/bin:/var/www/vendor/bin:~/bin:~/.composer/vendor/bin:$PATH
 ############################################################################
 # Install Codeception native
 ############################################################################
-#RUN curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
+#RUN mkdir -p ~/bin \
+#    && curl -LsS https://codeception.com/codecept.phar -o ~/bin/codecept \
 #    && chmod u+x ~/bin/codecept \
 #    && echo "alias codecept='XDEBUG_MODE=off ~/bin/codecept'" >> /home/user/.bashrc
+
+#############################################################################
+# Install PHPUnit native
+#############################################################################
+#RUN mkdir -p ~/bin \
+#    && wget -O ~/bin/phpunit https://phar.phpunit.de/phpunit-12.phar \
+#    && chmod u+x ~/bin/phpunit
+
+
+FROM php8dev AS test
+
+ENTRYPOINT ["bash", "docker-self-test.sh"]
+
+############################################################################
+# Copy development ini file
+############################################################################
+COPY config/docker/php.ini-development /usr/local/etc/php/php.ini
+
+
+WORKDIR /app
+
+############################################################################
+# Copy the source files into the container.
+############################################################################
+#COPY ./app /var/www
+
+
+############################################################################
+# If the composer.json file is present, install the dependencies.
+# This is done in the production image to ensure that the dependencies
+# are installed in the production environment.
+############################################################################
+#RUN if [ -f /var/www/composer.json ]; then \
+#        echo "Installing composer dependencies..."; \
+#        rm -fr /var/www/vendor \
+#        cd /var/www \
+#        composer install \
+#    else \
+#        echo "No composer.json file found, skipping composer install."; \
+#    fi
+#
+## run test script
+#RUN if [ -f ./test_to_run.sh ]; then \
+#        echo "\n\n\n ################## Running test script... ################\n\n"; \
+#        chmod +x ./test_to_run.sh \
+#        && ./test_to_run.sh \
+#    else \
+#        echo "No test script found, skipping test script."; \
+#    fi
+
+# Host the test results
 
 
 
@@ -226,6 +284,11 @@ FROM php8base AS php8prod
 # It does not include XDebug or any development tools.
 # The php8dev image should be used for development.
 ############################################################################
+
+############################################################################
+# Copy production ini file
+############################################################################
+COPY config/docker/php.ini-production /usr/local/etc/php/php.ini
 
 ############################################################################
 # Copy the source files into the container.
@@ -245,11 +308,6 @@ RUN if [ -f /var/www/composer.json ]; then \
     else \
         echo "No composer.json file found, skipping composer install."; \
     fi
-
-############################################################################
-# Copy production ini file
-############################################################################
-COPY config/docker/php.ini-production /usr/local/etc/php/php.ini
 
 ############################################################################
 # Remove unneeded files
