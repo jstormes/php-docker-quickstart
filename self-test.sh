@@ -33,14 +33,24 @@ else
   echo "composer.json not found. Skipping Composer installation."
 fi
 
-# Run unit tests if PHPUnit is phpunit.xml exists
-if [ -f phpunit.xml ]; then
+#### Run Unit Tests ####
+# Run pest if pest is found
+if command -v pest &> /dev/null; then
   echo
-  echo "Running PHPUnit tests..."
-  vendor/bin/phpunit --configuration phpunit.xml
+  echo "Running Pest tests..."
+  vendor/bin/pest
 else
   echo
-  echo "phpunit.xml not found. Skipping PHPUnit tests."
+  echo "Pest not found. Looking for PHPUnit."
+  # Run unit tests if PHPUnit is phpunit.xml exists
+  if [ -f phpunit.xml ]; then
+    echo
+    echo "Running PHPUnit tests..."
+    vendor/bin/phpunit --configuration phpunit.xml
+  else
+    echo
+    echo "phpunit.xml not found. Skipping PHPUnit tests."
+  fi
 fi
 
 # Run static analysis using PHPStan if phpstan.neon.dist exists
