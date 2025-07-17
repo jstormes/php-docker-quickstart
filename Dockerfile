@@ -1,4 +1,4 @@
-FROM php:8-apache AS php8base
+FROM php:8.1-apache AS php8base
 ############################################################################
 # This is the base PHP 8 docker image used for both the development and
 # production docker files.  By having this file common we can ensure that
@@ -295,6 +295,8 @@ COPY config/docker/php.ini-production /usr/local/etc/php/php.ini
 ############################################################################
 COPY ./app /var/www
 
+WORKDIR /var/www
+
 ############################################################################
 # If the composer.json file is present, install the dependencies.
 # This is done in the production image to ensure that the dependencies
@@ -312,6 +314,5 @@ RUN if [ -f /var/www/composer.json ]; then \
 ############################################################################
 # Remove unneeded files
 ############################################################################
-RUN rm -rf /var/www/vendor/composer \
-    && rm -rf /var/www/vendor/bin
+
 
