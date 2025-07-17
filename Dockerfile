@@ -177,11 +177,18 @@ RUN wget https://github.com/apicize/cli/releases/download/apicize-cli-v0.21.3/Ap
 RUN apt install ./Apicize-run_0.21.3_amd64.deb
 RUN rm -f Apicize-run_0.21.3_amd64.deb
 
+
+
 USER user
 WORKDIR /app
 CMD ["/bin/bash"]
 # Add our script files to the path so they can be found
 ENV PATH /app/bin:$PATH
+
+############################################################################
+# Install laravel installer
+############################################################################
+RUN composer global require laravel/installer
 
 ############################################################################
 # Setup Default XDebug CLI settings
@@ -315,6 +322,12 @@ RUN <<EOF
         echo "No composer.json file found, skipping composer install.";
     fi
 EOF
+
+############################################################################
+# Set permissions for the storage directory
+############################################################################
+RUN chown -R root:root /var/www/storage \
+    && chmod -R 777 /var/www/storage
 
 ############################################################################
 # Remove unneeded files
