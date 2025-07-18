@@ -326,8 +326,8 @@ EOF
 ############################################################################
 # Set permissions for the storage directory
 ############################################################################
-RUN chown -R root:root /var/www/storage \
-    && chmod -R 777 /var/www/storage
+RUN chown -Rf root:root /var/www/storage | true \
+    && chmod -Rf 777 /var/www/storage | true
 
 ############################################################################
 # Remove unneeded files
