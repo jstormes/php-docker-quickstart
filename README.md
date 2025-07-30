@@ -25,7 +25,15 @@ docker-compose up -d
 ```
 php-docker-quickstart/
 ├── app/                         # Your PHP application code
-│   └── html/                    # Web root directory
+│   ├── public/                  # Web root directory (served by PHP dev server)
+│   │   ├── index.php           # Main entry point
+│   │   └── .htaccess           # Apache configuration
+│   ├── src/                    # Application source code
+│   ├── tests/                  # Test files
+│   ├── var/                    # Application cache and logs
+│   ├── vendor/                 # Composer dependencies
+│   ├── composer.json           # PHP dependencies
+│   └── phpunit.xml            # PHPUnit configuration
 ├── config/                      # Configuration files
 │   └── docker/                  # Docker configuration files
 │       ├── php.ini-development  # Development PHP configuration
@@ -40,7 +48,8 @@ php-docker-quickstart/
 ├── README.md                    # This file
 ├── SETUP.md                     # Detailed setup guide
 ├── CONTRIBUTING.md              # How to contribute
-└── QUICK_REFERENCE.md           # Quick reference guide
+├── QUICK_REFERENCE.md           # Quick reference guide
+└── self-test.sh                 # Self-test script
 ```
 
 ## 🔧 Development Features
@@ -50,6 +59,7 @@ php-docker-quickstart/
 - **MariaDB** database server
 - **PhpMyAdmin** for database management
 - **Hot reload** - code changes reflect immediately
+- **PHP built-in server** - serves files from `app/public/` directory
 
 ### Database Access
 - **Host**: localhost
@@ -141,6 +151,9 @@ docker-compose exec php-dev bash
 
 # Rebuild containers
 docker-compose up --build
+
+# Run self-test
+./self-test.sh
 ```
 
 ## 🆘 Troubleshooting
@@ -161,6 +174,11 @@ ports:
 1. Ensure MariaDB container is running: `docker-compose ps`
 2. Check database logs: `docker-compose logs mariadb`
 3. Verify connection string in environment variables
+
+### Application Not Loading
+1. Check that the PHP development server is running: `docker-compose logs php-dev`
+2. Verify the `app/public/index.php` file exists and is accessible
+3. Check file permissions in the `app/` directory
 
 ## 📚 Additional Resources
 
