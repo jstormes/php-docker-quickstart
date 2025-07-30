@@ -4,25 +4,37 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\Tree;
 
-use App\Domain\Tree\SimpleNode;
+use App\Domain\Tree\ButtonNode;
 use PHPUnit\Framework\TestCase;
 
-class SimpleNodeTest extends TestCase
+class ButtonNodeTest extends TestCase
 {
     public function testConstructorAndGetters(): void
     {
-        $node = new SimpleNode('Test Node');
+        $node = new ButtonNode('Test Node', 'Click Me', 'alert("test")');
         
         $this->assertEquals('Test Node', $node->getName());
+        $this->assertEquals('button', $node->getType());
+        $this->assertEquals('Click Me', $node->getButtonText());
+        $this->assertEquals('alert("test")', $node->getButtonAction());
         $this->assertFalse($node->hasChildren());
         $this->assertEmpty($node->getChildren());
-        $this->assertEquals('simple', $node->getType());
+    }
+
+    public function testConstructorWithDefaults(): void
+    {
+        $node = new ButtonNode('Test Node');
+        
+        $this->assertEquals('Test Node', $node->getName());
+        $this->assertEquals('button', $node->getType());
+        $this->assertEquals('Test Btn', $node->getButtonText());
+        $this->assertEquals('', $node->getButtonAction());
     }
 
     public function testAddChild(): void
     {
-        $parent = new SimpleNode('Parent');
-        $child = new SimpleNode('Child');
+        $parent = new ButtonNode('Parent', 'Parent Button');
+        $child = new ButtonNode('Child', 'Child Button');
         
         $parent->addChild($child);
         
@@ -33,9 +45,9 @@ class SimpleNodeTest extends TestCase
 
     public function testAddMultipleChildren(): void
     {
-        $parent = new SimpleNode('Parent');
-        $child1 = new SimpleNode('Child 1');
-        $child2 = new SimpleNode('Child 2');
+        $parent = new ButtonNode('Parent', 'Parent Button');
+        $child1 = new ButtonNode('Child 1', 'Button 1');
+        $child2 = new ButtonNode('Child 2', 'Button 2');
         
         $parent->addChild($child1);
         $parent->addChild($child2);
@@ -48,7 +60,7 @@ class SimpleNodeTest extends TestCase
 
     public function testEmptyChildrenArray(): void
     {
-        $node = new SimpleNode('Test');
+        $node = new ButtonNode('Test', 'Test Button');
         
         $this->assertEmpty($node->getChildren());
         $this->assertFalse($node->hasChildren());
@@ -56,8 +68,8 @@ class SimpleNodeTest extends TestCase
 
     public function testHasChildrenAfterAdding(): void
     {
-        $parent = new SimpleNode('Parent');
-        $child = new SimpleNode('Child');
+        $parent = new ButtonNode('Parent', 'Parent Button');
+        $child = new ButtonNode('Child', 'Child Button');
         
         $this->assertFalse($parent->hasChildren());
         

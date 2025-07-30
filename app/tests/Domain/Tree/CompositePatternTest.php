@@ -5,33 +5,42 @@ declare(strict_types=1);
 namespace App\Tests\Domain\Tree;
 
 use App\Domain\Tree\SimpleNode;
+use App\Domain\Tree\ButtonNode;
 use App\Domain\Tree\TreeNode;
+use App\Domain\Tree\HtmlTreeNodeRenderer;
 use PHPUnit\Framework\TestCase;
 
 class CompositePatternTest extends TestCase
 {
+    private HtmlTreeNodeRenderer $renderer;
+
+    protected function setUp(): void
+    {
+        $this->renderer = new HtmlTreeNodeRenderer();
+    }
+
     public function testUniformInterface(): void
     {
         // Test that all nodes implement the same interface
         $node1 = new SimpleNode('Node 1');
-        $node2 = new SimpleNode('Node 2');
+        $node2 = new ButtonNode('Node 2', 'Button');
         
         $this->assertInstanceOf(TreeNode::class, $node1);
         $this->assertInstanceOf(TreeNode::class, $node2);
         
         // Both should have the same methods
         $this->assertTrue(method_exists($node1, 'getName'));
-        $this->assertTrue(method_exists($node1, 'render'));
         $this->assertTrue(method_exists($node1, 'addChild'));
         $this->assertTrue(method_exists($node1, 'getChildren'));
         $this->assertTrue(method_exists($node1, 'hasChildren'));
+        $this->assertTrue(method_exists($node1, 'getType'));
     }
 
     public function testTreatingIndividualAndCompositeUniformly(): void
     {
         // Create nodes that will act as both individual and composite
         $root = new SimpleNode('Root');
-        $branch = new SimpleNode('Branch');
+        $branch = new ButtonNode('Branch', 'Branch Button');
         $leaf1 = new SimpleNode('Leaf 1');
         $leaf2 = new SimpleNode('Leaf 2');
         
@@ -57,11 +66,11 @@ class CompositePatternTest extends TestCase
     {
         // Build a complex tree structure
         $root = new SimpleNode('Root');
-        $branch1 = new SimpleNode('Branch 1');
+        $branch1 = new ButtonNode('Branch 1', 'Button 1');
         $branch2 = new SimpleNode('Branch 2');
         $leaf1 = new SimpleNode('Leaf 1');
         $leaf2 = new SimpleNode('Leaf 2');
-        $leaf3 = new SimpleNode('Leaf 3');
+        $leaf3 = new ButtonNode('Leaf 3', 'Button 3');
         
         // Build the tree
         $branch1->addChild($leaf1);
@@ -71,7 +80,7 @@ class CompositePatternTest extends TestCase
         $root->addChild($branch2);
         
         // Test recursive rendering
-        $html = $root->render();
+        $html = $this->renderer->render($root);
         
         // Should contain all node names
         $this->assertStringContainsString('Root', $html);
@@ -91,15 +100,15 @@ class CompositePatternTest extends TestCase
         // Create a more complex tree
         $root = new SimpleNode('Company');
         
-        $hr = new SimpleNode('HR');
+        $hr = new ButtonNode('HR', 'HR Button');
         $it = new SimpleNode('IT');
-        $sales = new SimpleNode('Sales');
+        $sales = new ButtonNode('Sales', 'Sales Button');
         
         $hr->addChild(new SimpleNode('Recruitment'));
         $hr->addChild(new SimpleNode('Benefits'));
         
         $it->addChild(new SimpleNode('Development'));
-        $it->addChild(new SimpleNode('Infrastructure'));
+        $it->addChild(new ButtonNode('Infrastructure', 'Infra Button'));
         
         $sales->addChild(new SimpleNode('North'));
         $sales->addChild(new SimpleNode('South'));
@@ -108,7 +117,7 @@ class CompositePatternTest extends TestCase
         $root->addChild($it);
         $root->addChild($sales);
         
-        $html = $root->render();
+        $html = $this->renderer->render($root);
         
         // Verify all departments are present
         $departments = ['Company', 'HR', 'IT', 'Sales', 'Recruitment', 'Benefits', 'Development', 'Infrastructure', 'North', 'South'];
@@ -123,24 +132,24 @@ class CompositePatternTest extends TestCase
 
     public function testButtonFunctionality(): void
     {
-        $nodeWithButton = new SimpleNode('With Button', true);
-        $nodeWithoutButton = new SimpleNode('Without Button', false);
+        $nodeWithButton = new ButtonNode('With Button', 'Test Button');
+        $nodeWithoutButton = new SimpleNode('Without Button');
         
-        $this->assertTrue($nodeWithButton->hasButton());
-        $this->assertFalse($nodeWithoutButton->hasButton());
+        $this->assertEquals('button', $nodeWithButton->getType());
+        $this->assertEquals('simple', $nodeWithoutButton->getType());
         
-        $htmlWithButton = $nodeWithButton->render();
-        $htmlWithoutButton = $nodeWithoutButton->render();
+        $htmlWithButton = $this->renderer->render($nodeWithButton);
+        $htmlWithoutButton = $this->renderer->render($nodeWithoutButton);
         
         $this->assertStringContainsString('<button>', $htmlWithButton);
-        $this->assertStringContainsString('Test Btn', $htmlWithButton);
+        $this->assertStringContainsString('Test Button', $htmlWithButton);
         $this->assertStringNotContainsString('<button>', $htmlWithoutButton);
     }
 
     public function testEmptyTree(): void
     {
         $emptyNode = new SimpleNode('Empty');
-        $html = $emptyNode->render();
+        $html = $this->renderer->render($emptyNode);
         
         $this->assertStringContainsString('Empty', $html);
         $this->assertStringContainsString('<div>', $html);
@@ -151,10 +160,10 @@ class CompositePatternTest extends TestCase
     public function testSingleChildTree(): void
     {
         $parent = new SimpleNode('Parent');
-        $child = new SimpleNode('Child');
+        $child = new ButtonNode('Child', 'Child Button');
         $parent->addChild($child);
         
-        $html = $parent->render();
+        $html = $this->renderer->render($parent);
         
         $this->assertStringContainsString('Parent', $html);
         $this->assertStringContainsString('Child', $html);
@@ -166,15 +175,15 @@ class CompositePatternTest extends TestCase
     {
         // Create a deeply nested structure
         $level1 = new SimpleNode('Level 1');
-        $level2 = new SimpleNode('Level 2');
+        $level2 = new ButtonNode('Level 2', 'Button 2');
         $level3 = new SimpleNode('Level 3');
-        $level4 = new SimpleNode('Level 4');
+        $level4 = new ButtonNode('Level 4', 'Button 4');
         
         $level3->addChild($level4);
         $level2->addChild($level3);
         $level1->addChild($level2);
         
-        $html = $level1->render();
+        $html = $this->renderer->render($level1);
         
         // Should contain all levels
         $this->assertStringContainsString('Level 1', $html);

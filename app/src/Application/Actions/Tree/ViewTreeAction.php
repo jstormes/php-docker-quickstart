@@ -6,6 +6,8 @@ namespace App\Application\Actions\Tree;
 
 use App\Application\Actions\Action;
 use App\Domain\Tree\SimpleNode;
+use App\Domain\Tree\ButtonNode;
+use App\Domain\Tree\HtmlTreeNodeRenderer;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -13,8 +15,8 @@ class ViewTreeAction extends Action
 {
     protected function action(): Response
     {
-        // Build the tree structure using Composite pattern
-        $main = new SimpleNode('Main', true); // Main has a button
+        // Build the tree structure using the new hierarchy
+        $main = new ButtonNode('Main', 'Test Btn'); // Main has a button
         
         $sub1 = new SimpleNode('Sub-1');
         $sub2 = new SimpleNode('Sub-2');
@@ -30,17 +32,19 @@ class ViewTreeAction extends Action
         $main->addChild($sub1);
         $main->addChild($sub2);
         
-        // Generate HTML
-        $html = $this->generateHTML($main);
+        // Generate HTML using the renderer
+        $renderer = new HtmlTreeNodeRenderer();
+        $treeHtml = '<div class="tree"><ul><li>' . $renderer->render($main) . '</li></ul></div>';
+        
+        $html = $this->generateHTML($treeHtml);
         
         $this->response->getBody()->write($html);
         return $this->response->withHeader('Content-Type', 'text/html');
     }
     
-    private function generateHTML(SimpleNode $root): string
+    private function generateHTML(string $treeHtml): string
     {
         $css = $this->getCSS();
-        $treeHtml = '<div class="tree"><ul><li>' . $root->render() . '</li></ul></div>';
         
         return <<<HTML
 <!DOCTYPE html>
@@ -55,7 +59,7 @@ class ViewTreeAction extends Action
 </head>
 <body>
     <h1>Composite Pattern Tree Implementation</h1>
-    <p>This demonstrates the Composite design pattern with the same sample data as the original HTML.</p>
+    <p>This demonstrates the Composite design pattern with multiple node types.</p>
     {$treeHtml}
 </body>
 </html>
