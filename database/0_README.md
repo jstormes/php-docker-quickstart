@@ -1,16 +1,38 @@
 # Database Initialization
 
-This directory contains SQL files that are automatically executed when the MariaDB container starts for the first time. Use this to set up your database schema, initial data, and any other database initialization tasks.
+This directory contains SQL files that are automatically executed when the MariaDB container starts for the first time. **This directory is specifically for database creation and population scripts only.** 
+
+## 📋 Directory Purpose
+- **Table Creation**: SQL files that create database tables, indexes, and constraints
+- **Data Population**: SQL files that insert initial/sample data into tables
+- **Schema Setup**: Files that establish the basic database structure
+
+**Note**: Queries, stored procedures, views, and other operational SQL should be placed in the root directory or appropriate application directories.
 
 ## 🚀 How It Works
 
 When the MariaDB container starts for the first time, it automatically executes files in this directory in alphabetical order. The files are executed against the database specified by the `MYSQL_DATABASE` environment variable in `docker-compose.yml`.
 
 ### Supported File Types
-- **`.sql`** - SQL scripts (most common)
+- **`.sql`** - SQL scripts for table creation and data population (most common)
 - **`.sql.gz`** - Compressed SQL scripts
 - **`.sql.xz`** - XZ compressed SQL scripts
 - **`.sh`** - Shell scripts (with execute permission)
+
+### What Goes Here
+✅ **Appropriate for this directory:**
+- CREATE TABLE statements
+- INSERT statements for initial data
+- ALTER TABLE statements for schema changes
+- CREATE INDEX statements
+- Foreign key constraints
+
+❌ **Not appropriate for this directory:**
+- SELECT queries
+- Stored procedures
+- Views
+- Triggers
+- Complex business logic queries
 
 ### Execution Order
 Files are executed in alphabetical order by filename. Use 3-digit numbered prefixes (like `001_`, `002_`, etc.) to control execution order. This provides better organization and allows for more granular control.
