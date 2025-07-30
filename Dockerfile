@@ -324,10 +324,16 @@ RUN if [ -f /var/www/composer.json ]; then \
     fi
 
 ############################################################################
+# Link html to public
+############################################################################
+RUN rm -fr html
+RUN ln -s /var/www/public /var/www/html
+
+############################################################################
 # Set permissions for the storage directory
 ############################################################################
-RUN chown -Rf root:root /var/www/storage | true \
-    && chmod -Rf 777 /var/www/storage | true
+#RUN chown -Rf root:root /var/www/storage | true \
+#    && chmod -Rf 777 /var/www/storage | true
 
 ############################################################################
 # Remove unneeded files

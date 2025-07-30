@@ -72,9 +72,9 @@ services:
     # We are using this to force Docker to start our own command when the container
     # starts.  We can further override some environment variables only for this command.
     #
-    # This command starts a PHP server on port 80 using our mapped folder `/app/html`.
+    # This command starts a PHP server on port 80 using our mapped folder `/app/public`.
     #
-    command: bash -c 'php -S 0.0.0.0:80 -t /app/html'
+    command: bash -c 'php -S 0.0.0.0:80 -t /app/public'
     #
     # The export in the command: line overrides the xdebug.ini and any environment variables previously set.
     # XDEBUG_MODE, this will override the XDebug settings for the container.
@@ -86,8 +86,8 @@ services:
     # profile - Enables Profiling, with which you can analyze performance bottlenecks with tools like KCacheGrind.
     # trace - Enables the Function Trace feature, which allows you to record every function call, including arguments, variable assignment, and return value that is made during a request to a file.
     # XDEBUG_CONFIG="remote_enable=on" is for PHP 5.x and <7.1.  XDEBUG_MODE is for PHP >7.1 and 8.x.
-#    command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace XDEBUG_CONFIG="remote_enable=on" XDEBUG_SESSION=PHPSTORM; php -S 0.0.0.0:80 -t /app/html'
-#    command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace; php -S 0.0.0.0:80 -t /app/html'
+#    command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace XDEBUG_CONFIG="remote_enable=on" XDEBUG_SESSION=PHPSTORM; php -S 0.0.0.0:80 -t /app/public'
+#    command: bash -c 'export XDEBUG_MODE=debug,develop,gcstats,profile,trace; php -S 0.0.0.0:80 -t /app/public'
 
     # The `extra_hosts` lets us create DNS hostnames inside our container.
     # internal:host-gateway will map back to the host system.  This is used
