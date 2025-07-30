@@ -18,7 +18,8 @@ RUN apt-get -y update \
        wget \
        git \
        zip \
-       unzip
+       unzip \
+       dos2unix
 
 ############################################################################
 # Install AWS-CLI
@@ -173,9 +174,9 @@ RUN echo "alias mysql='mysql --user=root'\n" >> /home/user/.bashrc
 #############################################################################
 # Install Apicize
 #############################################################################
-RUN wget https://github.com/apicize/cli/releases/download/apicize-cli-v0.21.3/Apicize-run_0.21.3_amd64.deb
-RUN apt install ./Apicize-run_0.21.3_amd64.deb
-RUN rm -f Apicize-run_0.21.3_amd64.deb
+# RUN wget https://github.com/apicize/cli/releases/download/apicize-cli-v0.21.3/Apicize-run_0.21.3_amd64.deb
+# RUN apt install ./Apicize-run_0.21.3_amd64.deb
+# RUN rm -f Apicize-run_0.21.3_amd64.deb
 
 
 
@@ -188,7 +189,7 @@ ENV PATH /app/bin:$PATH
 ############################################################################
 # Install laravel installer
 ############################################################################
-RUN composer global require laravel/installer
+# RUN composer global require laravel/installer
 
 ############################################################################
 # Setup Default XDebug CLI settings
@@ -241,6 +242,7 @@ FROM php8dev AS test
 
 RUN mkdir -p /home/user/bin
 COPY ./self-test.sh /home/user/bin/self-test.bash
+# RUN dos2unix /home/user/bin/self-test.bash
 
 ENTRYPOINT ["bash","/home/user/bin/self-test.bash"]
 
@@ -312,16 +314,14 @@ WORKDIR /var/www
 # This is done in the production image to ensure that the dependencies
 # are installed in the production environment.
 ############################################################################
-RUN <<EOF
-  if [ -f /var/www/composer.json ]; then
-        echo "Installing composer dependencies...";
-        rm -fr /var/www/vendor
-        cd /var/www
-        composer install -n --no-dev --optimize-autoloader
-    else
-        echo "No composer.json file found, skipping composer install.";
+RUN if [ -f /var/www/composer.json ]; then \
+        echo "Installing composer dependencies..."; \
+        rm -fr /var/www/vendor; \
+        cd /var/www; \
+        composer install -n --no-dev --optimize-autoloader; \
+    else \
+        echo "No composer.json file found, skipping composer install."; \
     fi
-EOF
 
 ############################################################################
 # Set permissions for the storage directory

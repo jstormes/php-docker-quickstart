@@ -1,0 +1,80 @@
+# Docker-Based PHP Development Rules
+
+## Overview
+This project uses Docker for all PHP development. The setup includes multiple services defined in `docker-compose.yml`:
+- **php-dev**: Main development server (port 8088)
+- **php-prod**: Production testing server (port 9088) 
+- **ci-cd-test**: CI/CD testing server (port 5088)
+- **mariadb**: Database server (port 5000)
+- **phpmyadmin**: Database management (port 7088)
+
+## Development Workflow
+
+### 1. Starting the Environment
+Always use Docker Compose to start the development environment:
+```bash
+docker-compose up -d
+```
+
+### 2. PHP Code Location
+- All PHP code must be placed in the `app/html/` directory
+- This directory is mapped to `/app/html` inside the container
+- Changes are immediately reflected due to volume mounting
+
+### 3. Accessing Services
+- **Main PHP App**: http://localhost:8088
+- **Production Testing**: http://localhost:9088
+- **CI/CD Testing**: http://localhost:5088
+- **phpMyAdmin**: http://localhost:7088
+- **Database**: localhost:5000
+
+### 4. Running PHP Code
+- PHP files in `app/html/` are automatically served by the PHP development server
+- Use `http://localhost:8088/your-file.php` to access your code
+- The server runs on port 80 inside the container, mapped to port 8088 on host
+
+### 5. Database Development
+- Database is available at `mariadb:3306` from within containers
+- Connection string: `mysql:host=mariadb;dbname=app;port=3306;charset=utf8mb4;collation=utf8mb4_unicode_ci;user=root;password=password`
+- Use phpMyAdmin at http://localhost:7088 for database management
+
+### 6. Container Access
+To run commands inside the PHP container:
+```bash
+docker exec -it php-docker-quickstart-php-dev-1 bash
+```
+
+### 7. Development Guidelines
+- Never install PHP locally - use the Docker container
+- All dependencies should be managed through the Dockerfile
+- Use the development PHP configuration (`php.ini-development`)
+- XDebug is configured for debugging (see xdebug.ini)
+- Timezone is set to America/Chicago
+
+### 8. File Structure
+```
+app/
+├── html/           # PHP files served by web server
+│   ├── index.php   # Main entry point
+│   └── *.php       # Additional PHP files
+config/
+├── docker/         # Docker configuration files
+│   ├── php.ini-development
+│   ├── php.ini-production
+│   └── xdebug_3.x.x.ini
+database/           # Database initialization scripts
+```
+
+### 9. Stopping the Environment
+```bash
+docker-compose down
+```
+
+## Important Notes
+- The setup includes XDebug for debugging
+- Production configuration is available for testing
+- Database initialization scripts are in the `database/` directory
+- All development should happen within the Docker environment
+- Never modify files outside the mapped volumes
+alwaysApply: true
+---
