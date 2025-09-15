@@ -19,12 +19,25 @@ This guide provides step-by-step instructions for setting up the PHP Docker Quic
 4. Grant necessary permissions when prompted
 
 **Linux:**
+see: https://docs.docker.com/engine/install/debian/
 ```bash
 # Ubuntu/Debian
+# Add Docker's official GPG key:
 sudo apt-get update
-sudo apt-get install docker.io docker-compose
-sudo usermod -aG docker $USER
-# Log out and back in
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+```bash
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
 ### 2. Install PhpStorm (Optional)
@@ -38,7 +51,7 @@ sudo usermod -aG docker $USER
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/jstormes/php-docker-quickstart.git
 cd php-docker-quickstart
 ```
 
