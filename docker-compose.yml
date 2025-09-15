@@ -6,11 +6,11 @@
 #
 # A common development use case is ssh keys for private git repositories.
 ############################################################################
-secrets:
-  claude-auth:
-    file: ~/.claude/.credentials.json
-  claude-cfg:
-    file: ~/.claude.json
+#secrets:
+#  claude-auth:
+#    file: ~/.claude/.credentials.json
+#  claude-cfg:
+#    file: ~/.claude.json
 #  ssh:
 #    file: ~/.ssh
 #  aws:
@@ -116,17 +116,17 @@ services:
     # The `secrets` allows folders and files specified in the `secrets` at the top of this
     # file to be mapped inside the container.  To use git and composer in the container,
     # you will need to map your ssh key.
-    secrets:
-      - source: claude-auth
-        target: /home/user/.claude.system/.credentials.json
-        uid: "1000"
-        gid: "1000"
-        mode: 0600
-      - source: claude-cfg
-        target: /home/user/.claude.json.system
-        uid: "1000"
-        gid: "1000"
-        mode: 0600
+#    secrets:
+#      - source: claude-auth
+#        target: /home/user/.claude.system/.credentials.json
+#        uid: "1000"
+#        gid: "1000"
+#        mode: 0600
+#      - source: claude-cfg
+#        target: /home/user/.claude.json.system
+#        uid: "1000"
+#        gid: "1000"
+#        mode: 0600
 #      - source: ssh
 #        target: /home/user/.ssh
 #        uid: "1000"
