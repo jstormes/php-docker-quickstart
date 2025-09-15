@@ -1,42 +1,101 @@
-# Slim Framework 4 Skeleton Application
+# My Slim Framework Project
 
-[![Coverage Status](https://coveralls.io/repos/github/slimphp/Slim-Skeleton/badge.svg?branch=master)](https://coveralls.io/github/slimphp/Slim-Skeleton?branch=master)
+A modern web application built with Slim Framework 4, featuring clean architecture and Domain-Driven Design principles.
 
-Use this skeleton application to quickly setup and start working on a new Slim Framework 4 application. This application uses the latest Slim 4 with Slim PSR-7 implementation and PHP-DI container implementation. It also uses the Monolog logger.
+## Getting Started
 
-This skeleton application was built for Composer. This makes setting up a new Slim Framework application quick and easy.
+### Prerequisites
 
-## Install the Application
+- PHP 8.2 or higher
+- Composer
 
-Run this command from the directory in which you want to install your new Slim Framework application. You will require PHP 7.4 or newer.
+### Installation
+
+1. Install dependencies:
+   ```bash
+   composer install
+   ```
+
+2. Start the development server:
+   ```bash
+   composer start
+   ```
+
+3. Visit `http://localhost:8080` in your browser
+
+### Development with Docker
+
+Alternatively, you can use Docker:
 
 ```bash
-composer create-project slim/slim-skeleton [my-app-name]
-```
-
-Replace `[my-app-name]` with the desired directory name for your new application. You'll want to:
-
-* Point your virtual host document root to your new application's `public/` directory.
-* Ensure `logs/` is web writable.
-
-To run the application in development, you can run these commands 
-
-```bash
-cd [my-app-name]
-composer start
-```
-
-Or you can use `docker-compose` to run the app with `docker`, so you can run these commands:
-```bash
-cd [my-app-name]
 docker-compose up -d
 ```
-After that, open `http://localhost:8080` in your browser.
 
-Run this command in the application directory to run the test suite
+## Project Structure
+
+This project follows a clean architecture pattern:
+
+- **`src/Domain/`** - Core business logic, entities, and repository interfaces
+- **`src/Application/`** - Application layer with actions, middleware, and handlers
+- **`src/Infrastructure/`** - Implementation of repositories and external services
+- **`app/`** - Application configuration (routes, dependencies, settings)
+- **public/`** - Web server document root
+- **tests/`** - Test suite
+
+## Development Commands
+
+```bash
+# Start development server
+composer start
+
+# Run tests
+composer test
+
+# Check code standards (PSR-12)
+vendor/bin/phpcs
+
+# Fix code standards
+vendor/bin/phpcbf
+
+# Run static analysis
+vendor/bin/phpstan
+```
+
+## Adding New Features
+
+1. **Create Domain Entity**: Add new entities in `src/Domain/EntityName/`
+2. **Define Repository Interface**: Create repository interface in the domain layer
+3. **Implement Repository**: Add concrete implementation in `src/Infrastructure/Persistence/`
+4. **Create Actions**: Build action classes in `src/Application/Actions/EntityName/`
+5. **Configure Routes**: Add routes in `app/routes.php`
+6. **Register Dependencies**: Wire up dependencies in `app/repositories.php`
+
+## Configuration
+
+- **Application Settings**: `app/settings.php`
+- **Dependencies**: `app/dependencies.php`
+- **Routes**: `app/routes.php`
+- **Middleware**: `app/middleware.php`
+
+## Testing
+
+Run the test suite:
 
 ```bash
 composer test
 ```
 
-That's it! Now go build something cool.
+Tests are located in the `tests/` directory and follow PHPUnit conventions.
+
+## Code Quality
+
+This project maintains high code quality standards:
+
+- **PSR-12** coding standards
+- **PHPStan** static analysis (level 4)
+- **Strict typing** enabled throughout
+- **Clean architecture** principles
+
+## License
+
+This project is licensed under the MIT License.

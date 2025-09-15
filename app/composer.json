@@ -1,5 +1,6 @@
 {
     "name": "slim/slim-skeleton",
+    "version": "1.0.0",
     "description": "A Slim Framework skeleton application for rapid development",
     "keywords": [
         "microframework",
@@ -22,7 +23,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.2",
         "ext-json": "*",
         "monolog/monolog": "^2.8",
         "php-di/php-di": "^6.4",

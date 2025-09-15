@@ -1,4 +1,4 @@
-FROM php:8.1-apache AS php8base
+FROM php:8.2-apache AS php8base
 ############################################################################
 # This is the base PHP 8 docker image used for both the development and
 # production docker files.  By having this file common we can ensure that

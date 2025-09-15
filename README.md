@@ -19,13 +19,14 @@ docker-compose up -d
 - **Development server**: http://localhost:8088
 - **Production like server**: http://localhost:9088
 - **PhpMyAdmin**: http://localhost:7088
+- **Command Line**: docker-compose exec php-dev bash
 
 ## 📁 Project Structure
 
 ```
 php-docker-quickstart/
 ├── app/                         # Your PHP application code
-│   └── html/                    # Web root directory
+│   └── public/                    # Web root directory
 ├── config/                      # Configuration files
 │   └── docker/                  # Docker configuration files
 │       ├── php.ini-development  # Development PHP configuration
