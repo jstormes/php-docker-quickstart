@@ -6,7 +6,11 @@
 #
 # A common development use case is ssh keys for private git repositories.
 ############################################################################
-#secrets:
+secrets:
+  claude-auth:
+    file: ~/.claude/.credentials.json
+  claude-cfg:
+    file: ~/.claude.json
 #  ssh:
 #    file: ~/.ssh
 #  aws:
@@ -44,9 +48,20 @@ services:
     environment:
       - TZ=America/Chicago # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
+      # Application environment
+      - APP_ENV=development
+
+      # Claude API key
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+
       # Database connection string for the application.
       # See the "mariadb:" section below for the database setup.
-      - MYSQL_DSN=mysql:host=mariadb;dbname=app;port=3306;charset=utf8mb4;collation=utf8mb4_unicode_ci;user=root;password=password
+      # Database connection environment variables
+      - MYSQL_HOST=mariadb
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=app
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password
 
     # The `ports` tells Docker to map port 80 from inside the container to
     # port 8088 outside the container aka port 8088 on the host, aka your laptop.
@@ -101,7 +116,17 @@ services:
     # The `secrets` allows folders and files specified in the `secrets` at the top of this
     # file to be mapped inside the container.  To use git and composer in the container,
     # you will need to map your ssh key.
-#    secrets:
+    secrets:
+      - source: claude-auth
+        target: /home/user/.claude.system/.credentials.json
+        uid: "1000"
+        gid: "1000"
+        mode: 0600
+      - source: claude-cfg
+        target: /home/user/.claude.json.system
+        uid: "1000"
+        gid: "1000"
+        mode: 0600
 #      - source: ssh
 #        target: /home/user/.ssh
 #        uid: "1000"

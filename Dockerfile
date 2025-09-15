@@ -18,7 +18,8 @@ RUN apt-get -y update \
        wget \
        git \
        zip \
-       unzip
+       unzip \
+       dos2unix
 
 ############################################################################
 # Install AWS-CLI
@@ -127,7 +128,7 @@ RUN docker-php-ext-install pdo pdo_mysql && docker-php-ext-configure pdo_mysql
 RUN export XDEBUG_MODE=off \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar \
     && chmod a+x /usr/local/bin/composer.phar \
-    && echo "#!/usr/bin/env bash\n\nXDEBUG_MODE=off /usr/local/bin/composer.phar \$@" > /usr/local/bin/composer \
+    && echo "#!/usr/bin/env bash\n\nXDEBUG_MODE=coverage /usr/local/bin/composer.phar \$@" > /usr/local/bin/composer \
     && chmod a+x /usr/local/bin/composer
 
 
@@ -143,7 +144,7 @@ FROM php8base AS php8dev
 # It is not intended for production use.
 # The php8prodcution image should be used for production.
 ################################################################################
-
+RUN apt install -y findutils jq grep gawk sed
 
 ############################################################################
 # Setup XDebug https://xdebug.org/download/historical
@@ -165,30 +166,66 @@ RUN useradd -m user \
     && echo "password\npassword" | passwd root
 
 ############################################################################
-# Install MySQL client
+# Install MariaDB client tools (includes mariadb, mariadb-dump, etc.)
 ############################################################################
-RUN apt-get install -y default-mysql-client
+RUN apt-get update -y && apt-get install -y mariadb-client default-mysql-client
 RUN echo "alias mysql='mysql --user=root'\n" >> /home/user/.bashrc
+RUN echo "alias mariadb='mariadb --user=root'\n" >> /home/user/.bashrc
+
 
 #############################################################################
 # Install Apicize
 #############################################################################
-RUN wget https://github.com/apicize/cli/releases/download/apicize-cli-v0.21.3/Apicize-run_0.21.3_amd64.deb
-RUN apt install ./Apicize-run_0.21.3_amd64.deb
-RUN rm -f Apicize-run_0.21.3_amd64.deb
+# RUN wget https://github.com/apicize/cli/releases/download/apicize-cli-v0.21.3/Apicize-run_0.21.3_amd64.deb
+# RUN apt install ./Apicize-run_0.21.3_amd64.deb
+# RUN rm -f Apicize-run_0.21.3_amd64.deb
 
-
+############################################################################
+# Install Node.js LTS from NodeSource
+############################################################################
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get install -y nodejs
 
 USER user
 WORKDIR /app
 CMD ["/bin/bash"]
 # Add our script files to the path so they can be found
-ENV PATH /app/bin:$PATH
+ENV PATH /home/user/.npm-packages/bin:/app/bin:$PATH
+ENV NODE_PATH="/home/user/.npm-packages/lib/node_modules:$NODE_PATH"
+ENV MANPATH="/home/user/.npm-packages/share/man:$(manpath)"
+
+
+
+############################################################################
+# Install Claude CLI
+############################################################################
+RUN cd /home/user \
+    && mkdir "/home/user/.npm-packages" \
+    && echo "prefix=/home/user/.npm-packages" >> /home/user/.npmrc \
+    && npm install -g @anthropic-ai/claude-code
+
+############################################################################
+# Inside Docker Let Claude Run Free...
+############################################################################
+RUN echo "alias claude='claude --dangerously-skip-permissions'\n" >> /home/user/.bashrc
+
+############################################################################
+# Setup Claude configuration file copying
+############################################################################
+RUN echo "# Check for Claude system configuration and copy if exists" >> /home/user/.bashrc \
+    && echo "if [ -f /home/user/.claude.json.system ]; then" >> /home/user/.bashrc \
+    && echo "    cp /home/user/.claude.json.system /home/user/.claude.json" >> /home/user/.bashrc \
+    && echo "fi" >> /home/user/.bashrc \
+    && echo "if [ -f /home/user/.claude.system/.credentials.json ]; then" >> /home/user/.bashrc \
+    && echo "    mkdir -p /home/user/.claude" >> /home/user/.bashrc \
+    && echo "    cp /home/user/.claude.system/.credentials.json /home/user/.claude/.credentials.json" >> /home/user/.bashrc \
+    && echo "fi" >> /home/user/.bashrc
+
 
 ############################################################################
 # Install laravel installer
 ############################################################################
-RUN composer global require laravel/installer
+# RUN composer global require laravel/installer
 
 ############################################################################
 # Setup Default XDebug CLI settings
@@ -241,6 +278,7 @@ FROM php8dev AS test
 
 RUN mkdir -p /home/user/bin
 COPY ./self-test.sh /home/user/bin/self-test.bash
+# RUN dos2unix /home/user/bin/self-test.bash
 
 ENTRYPOINT ["bash","/home/user/bin/self-test.bash"]
 
@@ -296,6 +334,11 @@ FROM php8base AS php8prod
 ############################################################################
 
 ############################################################################
+# Eable Mod Rewrite
+############################################################################
+RUN a2enmod rewrite
+
+############################################################################
 # Copy production ini file
 ############################################################################
 COPY config/docker/php.ini-production /usr/local/etc/php/php.ini
@@ -305,6 +348,10 @@ COPY config/docker/php.ini-production /usr/local/etc/php/php.ini
 ############################################################################
 COPY ./app /var/www
 
+RUN #chmod -R 777 /var/www/logs
+
+RUN #chmod -R 777 /var/www/var
+
 WORKDIR /var/www
 
 ############################################################################
@@ -312,22 +359,26 @@ WORKDIR /var/www
 # This is done in the production image to ensure that the dependencies
 # are installed in the production environment.
 ############################################################################
-RUN <<EOF
-  if [ -f /var/www/composer.json ]; then
-        echo "Installing composer dependencies...";
-        rm -fr /var/www/vendor
-        cd /var/www
-        composer install -n --no-dev --optimize-autoloader
-    else
-        echo "No composer.json file found, skipping composer install.";
+RUN if [ -f /var/www/composer.json ]; then \
+        echo "Installing composer dependencies..."; \
+        rm -fr /var/www/vendor; \
+        cd /var/www; \
+        composer install -n --no-dev --optimize-autoloader; \
+    else \
+        echo "No composer.json file found, skipping composer install."; \
     fi
-EOF
+
+############################################################################
+# Link html to public
+############################################################################
+RUN rm -fr html
+RUN ln -s /var/www/public /var/www/html
 
 ############################################################################
 # Set permissions for the storage directory
 ############################################################################
-RUN chown -Rf root:root /var/www/storage | true \
-    && chmod -Rf 777 /var/www/storage | true
+#RUN chown -Rf root:root /var/www/storage | true \
+#    && chmod -Rf 777 /var/www/storage | true
 
 ############################################################################
 # Remove unneeded files
