@@ -89,7 +89,7 @@ services:
     #
     # This command starts a PHP server on port 80 using our mapped folder `/app/html`.
     #
-    command: bash -c 'php -S 0.0.0.0:80 -t /app/html'
+    command: bash -c 'php -S 0.0.0.0:80 -t /app/public'
     #
     # The export in the command: line overrides the xdebug.ini and any environment variables previously set.
     # XDEBUG_MODE, this will override the XDebug settings for the container.
