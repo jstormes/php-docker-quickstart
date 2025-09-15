@@ -140,3 +140,4 @@ The development environment includes Claude Code CLI pre-installed:
 - xDebug profiling output is saved to `xdebug.info/` directory
 - Use the development container for coding; production container for deployment testing
 - Never run PHP commands directly on host - they will fail due to missing dependencies and configuration
+- always use mariadb tool inside docker to access the database.

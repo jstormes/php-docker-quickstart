@@ -26,7 +26,7 @@ docker-compose up -d
 ```
 php-docker-quickstart/
 ├── app/                         # Your PHP application code
-│   └── public/                    # Web root directory
+│   └── public/                  # Web root directory
 ├── config/                      # Configuration files
 │   └── docker/                  # Docker configuration files
 │       ├── php.ini-development  # Development PHP configuration

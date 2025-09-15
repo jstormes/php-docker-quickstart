@@ -69,7 +69,7 @@ services:
     # host to http://localhost:8088.
     # {host port}:{container port}
     ports:
-      - "8088:80"
+      - "8088:8088"
 
     # `volumes` tells Docker to map folders and files from the host to
     # inside the Docker container.
@@ -89,7 +89,7 @@ services:
     #
     # This command starts a PHP server on port 80 using our mapped folder `/app/html`.
     #
-    command: bash -c 'php -S 0.0.0.0:80 -t /app/public'
+    command: bash -c 'php -S 0.0.0.0:8088 -t /app/public'
     #
     # The export in the command: line overrides the xdebug.ini and any environment variables previously set.
     # XDEBUG_MODE, this will override the XDebug settings for the container.
