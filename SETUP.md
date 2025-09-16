@@ -69,7 +69,7 @@ docker-compose up
 ### 3. Verify Installation
 
 1. Open your browser and go to http://localhost:8088
-2. You should see the PHP info page
+2. You should see the "Hello World!" page
 3. Check PhpMyAdmin at http://localhost:7088
 4. Verify database connection with credentials:
    - Host: localhost
