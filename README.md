@@ -40,7 +40,6 @@ php-docker-quickstart/
 ├── Dockerfile                   # Docker image definition
 ├── README.md                    # This file
 ├── SETUP.md                     # Detailed setup guide
-├── CONTRIBUTING.md              # How to contribute
 └── QUICK_REFERENCE.md           # Quick reference guide
 ```
 

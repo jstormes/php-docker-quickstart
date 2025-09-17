@@ -5,7 +5,7 @@ FROM php:8.2-apache AS php8base
 # any needed extensions are installed the same in both docker enviornments.
 #
 # Only things that are common acorss both the development and prodcution
-# docker files should go in this file.
+# docker files should go in this first section.
 ############################################################################
 
 
