@@ -49,7 +49,7 @@ php-docker-quickstart/
 - **PHP 8.x** with common extensions
 - **MariaDB** database server
 - **PhpMyAdmin** for database management
-- **Hot reload** - code changes reflect immediately
+- **Hot reload** - code changes reflect immediately for Development server
 
 ### Database Access
 - **Host**: localhost
