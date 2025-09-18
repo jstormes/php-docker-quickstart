@@ -13,6 +13,7 @@ A ready-to-use PHP development environment with Docker, featuring PhpStorm integ
 git clone git@github.com:jstormes/php-docker-quickstart.git
 cd php-docker-quickstart
 docker-compose up -d
+docker-compose exec php-dev composer install
 ```
 
 ### 2. Access Your Application
