@@ -169,6 +169,69 @@ docker-compose up --build
 - View database logs: `docker-compose logs mariadb`
 - Verify connection string in environment variables
 
+## Claude Code Setup
+
+### 1. Enable Claude Code File Access
+
+Uncomment these sections in `docker-compose.yml`:
+
+1. **Secrets section** at the top of the file:
+   ```yaml
+   secrets:
+     claude-auth:
+       file: ~/.claude/.credentials.json
+     claude-cfg:
+       file: ~/.claude.json
+   ```
+
+2. **Secrets mapping in php-dev service**:
+   ```yaml
+   secrets:
+     - source: claude-auth
+       target: /home/user/.claude.system/.credentials.json
+       uid: "1000"
+       gid: "1000"
+       mode: 0600
+     - source: claude-cfg
+       target: /home/user/.claude.json.system
+       uid: "1000"
+       gid: "1000"
+       mode: 0600
+   ```
+
+### 2. Configure API Key (Optional)
+
+Set your Anthropic API key as an environment variable on your host system:
+
+**Windows:**
+```cmd
+set ANTHROPIC_API_KEY=your_api_key_here
+```
+
+**macOS/Linux:**
+```bash
+export ANTHROPIC_API_KEY=your_api_key_here
+```
+
+### 3. Using Claude Code
+
+1. Access the development container:
+   ```bash
+   docker-compose exec php-dev bash
+   ```
+
+2. Start Claude Code:
+   ```bash
+   claude
+   ```
+
+3. Claude Code capabilities:
+   - Code generation and refactoring
+   - Debugging assistance
+   - Code review and optimization
+   - Documentation generation
+   - Test writing and execution
+
 ### Getting Help
 
 1. Check the main README.md for quick reference

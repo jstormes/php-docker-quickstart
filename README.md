@@ -125,6 +125,34 @@ To use AWS services inside the container:
    aws sts get-caller-identity
    ```
 
+### Claude Code Integration
+This environment includes Claude Code CLI for AI-powered development assistance:
+
+1. Uncomment the Claude secrets section in `docker-compose.yml`:
+   ```yaml
+   secrets:
+     claude-auth:
+       file: ~/.claude/.credentials.json
+     claude-cfg:
+       file: ~/.claude.json
+   ```
+2. Uncomment the Claude secrets mapping in the php-dev service
+3. (Optional) Set your Anthropic API key as an environment variable:
+   ```bash
+   export ANTHROPIC_API_KEY=your_api_key_here
+   ```
+4. Access Claude Code inside the development container:
+   ```bash
+   docker-compose exec php-dev bash
+   claude
+   ```
+5. Claude Code can help with:
+   - Code generation and refactoring
+   - Debugging assistance
+   - Code review and optimization
+   - Documentation generation
+   - Test writing and execution
+
 ## 🛠️ Common Commands
 
 ```bash
