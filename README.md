@@ -166,7 +166,7 @@ This environment includes Gemini CLI for AI-powered development assistance:
    ```yaml
    secrets:
       - source: gemini-auth
-        target: /home/user/.gemini.syste
+        target: /home/user/.gemini.system
    ```
 3. Access Gemini inside the development container:
    ```bash
