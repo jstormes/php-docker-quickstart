@@ -153,6 +153,27 @@ This environment includes Claude Code CLI for AI-powered development assistance:
    - Documentation generation
    - Test writing and execution
 
+### Gemini Integration
+This environment includes Gemini CLI for AI-powered development assistance:
+
+1. Uncomment the Gemini secrets section in `docker-compose.yml`:
+   ```yaml
+   secrets:
+     gemini-auth:
+       file: ~/.gemini
+   ```
+2. Uncomment the Gemini secrets mapping in the php-dev service
+   ```yaml
+   secrets:
+      - source: gemini-auth
+        target: /home/user/.gemini.syste
+   ```
+3. Access Gemini inside the development container:
+   ```bash
+   docker-compose exec php-dev bash
+   gemini
+   ```
+
 ## 🛠️ Common Commands
 
 ```bash

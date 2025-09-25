@@ -7,6 +7,8 @@
 # A common development use case is ssh keys for private git repositories.
 ############################################################################
 #secrets:
+#  gemini-auth:
+#    file: ~/.gemini
 #  claude-auth:
 #    file: ~/.claude/.credentials.json
 #  claude-cfg:
@@ -52,7 +54,7 @@ services:
       - APP_ENV=development
 
       # Claude API key
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+#      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
 
       # Database connection string for the application.
       # See the "mariadb:" section below for the database setup.
@@ -117,6 +119,9 @@ services:
     # file to be mapped inside the container.  To use git and composer in the container,
     # you will need to map your ssh key.
 #    secrets:
+#      - source: gemini-auth
+#        target: /home/user/.gemini.system
+#
 #      - source: claude-auth
 #        target: /home/user/.claude.system/.credentials.json
 #        uid: "1000"
@@ -127,6 +132,7 @@ services:
 #        uid: "1000"
 #        gid: "1000"
 #        mode: 0600
+#
 #      - source: ssh
 #        target: /home/user/.ssh
 #        uid: "1000"

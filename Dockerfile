@@ -216,6 +216,11 @@ RUN cd /home/user \
     && npm install -g @google/gemini-cli
 
 ############################################################################
+# Inside Docker Let Gemini Run Free...
+############################################################################
+RUN echo "alias gemini='gemini --yolo'\n" >> /home/user/.bashrc
+
+############################################################################
 # Setup Claude configuration file copying
 ############################################################################
 RUN echo "# Check for Claude system configuration and copy if exists" >> /home/user/.bashrc \
@@ -225,6 +230,14 @@ RUN echo "# Check for Claude system configuration and copy if exists" >> /home/u
     && echo "if [ -f /home/user/.claude.system/.credentials.json ]; then" >> /home/user/.bashrc \
     && echo "    mkdir -p /home/user/.claude" >> /home/user/.bashrc \
     && echo "    cp /home/user/.claude.system/.credentials.json /home/user/.claude/.credentials.json" >> /home/user/.bashrc \
+    && echo "fi" >> /home/user/.bashrc \
+    && echo "if [ -d /home/user/.gemini.system ]; then" >> /home/user/.bashrc \
+    && echo "    mkdir -p /home/user/.gemini" >> /home/user/.bashrc \
+    && echo "    cp /home/user/.gemini.system/installation_id /home/user/.gemini/installation_id" >> /home/user/.bashrc \
+    && echo "    cp /home/user/.gemini.system/credentials.json /home/user/.gemini/credentials.json" >> /home/user/.bashrc \
+    && echo "    cp /home/user/.gemini.system/google_accounts.json /home/user/.gemini/google_accounts.json" >> /home/user/.bashrc \
+    && echo "    cp /home/user/.gemini.system/oauth_creds.json /home/user/.gemini/oauth_creds.json" >> /home/user/.bashrc \
+    && echo "    cp /home/user/.gemini.system/settings.json /home/user/.gemini/settings.json" >> /home/user/.bashrc \
     && echo "fi" >> /home/user/.bashrc
 
 
