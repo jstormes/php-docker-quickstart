@@ -221,7 +221,7 @@ RUN cd /home/user \
 RUN echo "alias gemini='gemini --yolo'\n" >> /home/user/.bashrc
 
 ############################################################################
-# Setup Claude configuration file copying
+# Setup Claude/Gemini configuration file copying
 ############################################################################
 RUN echo "# Check for Claude system configuration and copy if exists" >> /home/user/.bashrc \
     && echo "if [ -f /home/user/.claude.json.system ]; then" >> /home/user/.bashrc \
