@@ -210,6 +210,12 @@ RUN cd /home/user \
 RUN echo "alias claude='claude --dangerously-skip-permissions'\n" >> /home/user/.bashrc
 
 ############################################################################
+# Install Gemini CLI
+############################################################################
+RUN cd /home/user \
+    && npm install -g @google/gemini-cli
+
+############################################################################
 # Setup Claude configuration file copying
 ############################################################################
 RUN echo "# Check for Claude system configuration and copy if exists" >> /home/user/.bashrc \
